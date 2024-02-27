@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/27 22:07:04 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/02/27 22:34:29 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	philosophers(int ac, char **av)
 {
 	t_program	*program;
 	t_fork		**forks;
-	t_philo		**philosophers;
+	t_philo		**philos;
 
 	program = parse_input(ac, av);
 	if (!program)
@@ -25,8 +25,16 @@ void	philosophers(int ac, char **av)
 	forks = init_forks(program->n_philos);
 	if (!forks)
 		return (printf("malloc error\n"), free(program), exit(EXIT_FAILURE));
+	philos = init_philos(program, forks);
+	if (!philos)
+	{
+		printf("malloc error\n");
+		clear_forks(forks, program->n_philos);
+		return (free(program), exit(EXIT_FAILURE));
+	}
 	/**/
 	clear_forks(forks, program->n_philos);
+	clear_philos(philos, program->n_philos);
 	free(program);
 }
 
