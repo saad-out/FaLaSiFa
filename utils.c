@@ -6,11 +6,40 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 19:04:18 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/27 19:12:16 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/02/27 23:08:02 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+
+int	check_program_ready(t_program *program)
+{
+	int		ret;
+	bool	ready;
+
+	ret = pthread_mutex_lock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	ready = program->ready;
+	ret = pthread_mutex_unlock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	return ((int)ready);
+}
+
+int	set_program_ready(t_program *program)
+{
+	int	ret;
+
+	ret = pthread_mutex_lock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	program->ready = true;
+	ret = pthread_mutex_unlock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	return (0);
+}
 
 static int	ft_isspace(char c)
 {

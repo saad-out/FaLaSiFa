@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/27 22:28:53 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/02/27 23:13:46 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ struct s_philo
 	t_program		*program;
 	t_fork			*first_fork;
 	t_fork			*second_fork;
+	pthread_t		thread;
 	pthread_mutex_t	mutex;
 };
 
@@ -45,11 +46,13 @@ struct s_fork
 
 struct s_program
 {
-	__u_int	n_philos;
-	__u_int	t_die;
-	__u_int	t_eat;
-	__u_int	t_sleep;
-	long	max_meals;
+	__u_int			n_philos;
+	__u_int			t_die;
+	__u_int			t_eat;
+	__u_int			t_sleep;
+	long			max_meals;
+	bool			ready;
+	pthread_mutex_t	mutex;
 };
 /* ------ */
 
@@ -60,6 +63,11 @@ t_fork		**init_forks(__u_int n);
 t_philo		**init_philos(t_program *program, t_fork **forks);
 void		clear_forks(t_fork	**forks, __u_int i);
 void		clear_philos(t_philo **philos, __u_int i);
+void		start_threads(t_program *, t_philo **, t_fork **);
+int			check_program_ready(t_program *program);
+int			set_program_ready(t_program *program);
+void		*philo_thread(void *arg);
+void		start_threads(t_program *, t_philo **, t_fork **);
 /* --------- */
 
 #endif /* MAIN_H */

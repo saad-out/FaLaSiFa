@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 21:53:48 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/27 21:54:09 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/02/27 23:03:40 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ t_program	*parse_input(int ac, char **av)
 	t_program	*program;
 	long		n;
 	bool		err;
+	int			ret;
 
 	program = (t_program *)malloc(sizeof(t_program));
 	if (!program)
@@ -42,5 +43,9 @@ t_program	*parse_input(int ac, char **av)
 	}
 	else
 		program->max_meals = -1;
+	program->ready = false;
+	ret = pthread_mutex_init(&program->mutex, NULL);
+	if (ret != 0)
+		return (free(program), NULL);
 	return (program);
 }
