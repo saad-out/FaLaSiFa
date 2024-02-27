@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/27 19:24:31 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/02/27 22:05:59 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,12 @@ struct s_philo
 	pthread_mutex_t	mutex;
 };
 
+struct s_fork
+{
+	int				id;
+	pthread_mutex_t	mutex;
+};
+
 struct s_program
 {
 	__u_int	n_philos;
@@ -48,7 +54,10 @@ struct s_program
 /* ------ */
 
 /* PROTOTYPES */
-__u_int	ft_atoerr(const char *nptr, bool *err);
+t_program	*parse_input(int ac, char **av);
+__u_int		ft_atoerr(const char *nptr, bool *err);
+t_fork		**init_forks(__u_int n);
+void		clear_forks(t_fork	**forks, __u_int i);
 /* --------- */
 
 #endif /* MAIN_H */
