@@ -6,11 +6,77 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 19:04:18 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/27 23:08:02 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/02/29 21:26:35 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+
+__u_int	get_time(void)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL); //TODO: handle error
+	return ((__u_int)(time.tv_sec * 1000 + time.tv_usec / 1000));
+}
+
+int	set_program_philo_died(t_program *program)
+{
+	int	ret;
+
+	ret = pthread_mutex_lock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	program->philo_died = true;
+	ret = pthread_mutex_unlock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	return (0);
+}
+
+int	check_program_philo_died(t_program *program)
+{
+	int		ret;
+	bool	died;
+
+	ret = pthread_mutex_lock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	died = program->philo_died;
+	ret = pthread_mutex_unlock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	return ((int)died);
+}
+
+long	check_program_finished(t_program *program)
+{
+	int		ret;
+	long	finished;
+
+	ret = pthread_mutex_lock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	finished = program->finished;
+	ret = pthread_mutex_unlock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	return (finished);
+}
+
+int	set_program_finished(t_program *program)
+{
+	int	ret;
+
+	ret = pthread_mutex_lock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	program->finished++;
+	ret = pthread_mutex_unlock(&program->mutex);
+	if (ret != 0)
+		return (-1);
+	return (0);
+}
 
 int	check_program_ready(t_program *program)
 {
