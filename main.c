@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/29 17:10:17 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/02/29 21:53:54 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ void	philosophers(int ac, char **av)
 	program->forks = forks;
 	program->philos = philos;
 	program->finished = false;
+	program->ready = false;
+	program->philo_died = false;
 	/* -- */
 
 	/* core */

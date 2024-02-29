@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 22:51:36 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/29 21:45:00 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/02/29 21:59:17 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	*monitor_thread(void *arg)
 			break ;
 		}
 		ret = 1;
+		usleep(8 * 1000);
 	}
 	return (NULL);
 }
