@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 22:51:36 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/29 21:59:17 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/02/29 22:05:24 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	*philo_thread(void *arg)
 	}
 	philo->last_meal = get_time();
 	// printf("PHILO %d: F-> %d S-> %d\n", philo->id, philo->first_fork->id, philo->second_fork->id);
+	if (philo->id % 2 == 0)
+		usleep(10 * 1000);
 	meals = 0;
 	while (program->max_meals == -1 || meals < program->max_meals)
 	{

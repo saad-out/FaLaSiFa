@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 21:55:38 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/27 22:27:09 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/02/29 22:11:14 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,18 @@ t_philo	**init_philos(t_program *program, t_fork **forks)
 			return (clear_philos(philos, i), free(philos), NULL);
 		philos[i]->id = i + 1;
 		philos[i]->program = program;
-		if (i + 1 != program->n_philos)
-		{
-			philos[i]->first_fork = forks[i + 1];
-			philos[i]->second_fork = forks[i];
-		}
-		else
-		{
-			philos[i]->first_fork = forks[i];
-			philos[i]->second_fork = forks[(i + 1) % program->n_philos];
-		}
+		// if (i + 1 != program->n_philos)
+		// {
+		// 	philos[i]->first_fork = forks[i + 1];
+		// 	philos[i]->second_fork = forks[i];
+		// }
+		// else
+		// {
+		// 	philos[i]->first_fork = forks[i];
+		// 	philos[i]->second_fork = forks[(i + 1) % program->n_philos];
+		// }
+		philos[i]->first_fork = forks[(i + 1) % program->n_philos];
+		philos[i]->second_fork = forks[i];
 		ret = pthread_mutex_init(&philos[i]->mutex, NULL);
 		if (ret != 0)
 			return (clear_philos(philos, i), free(philos), NULL);
