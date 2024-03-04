@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/29 21:53:54 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:03:01 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	philosophers(int ac, char **av)
 	program->finished = false;
 	program->ready = false;
 	program->philo_died = false;
+	program->err = false;
 	/* -- */
 
 	/* core */
@@ -48,6 +49,7 @@ void	philosophers(int ac, char **av)
 	/* --- */
 
 	/* cleanup */
+	printf("reached cleanup\n");
 	clear_forks(forks, program->n_philos);
 	clear_philos(philos, program->n_philos);
 	free(program);

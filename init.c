@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 21:55:38 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/29 22:11:14 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:41:17 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_philo	**init_philos(t_program *program, t_fork **forks)
 			return (clear_philos(philos, i), free(philos), NULL);
 		philos[i]->id = i + 1;
 		philos[i]->program = program;
+		philos[i]->finished = false;
 		// if (i + 1 != program->n_philos)
 		// {
 		// 	philos[i]->first_fork = forks[i + 1];
