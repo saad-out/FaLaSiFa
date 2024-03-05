@@ -1,0 +1,2 @@
+if there is a mutex to prevent a philosopher from dying and starting eating at the same time.
+t_die >= passed time not strictly >

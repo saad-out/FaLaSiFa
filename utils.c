@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 19:04:18 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/29 21:26:35 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:44:26 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,4 +137,59 @@ __u_int	ft_atoerr(const char *nptr, bool *err)
 	if (nptr[i] != '\0')
 		return (*err = 1, 0);
 	return ((__u_int)(result));
+}
+
+// int	ft_usleep(useconds_t time)
+int	ft_usleep(__u_int time)
+{
+	__u_int	start;
+
+	printf("going to sleep for %u\n", time);
+	start = get_time();
+	while ((get_time() - start) < time)
+		usleep(time / 10);
+	return (0);
+}
+
+int	set_philo_last_meal(t_philo *philo)
+{
+	int	ret;
+
+	ret = pthread_mutex_lock(&philo->mutex);
+	if (ret != 0)
+		return (-1);
+	philo->last_meal = get_time();
+	ret = pthread_mutex_unlock(&philo->mutex);
+	if (ret != 0)
+		return (-1);
+	return (0);
+}
+
+int	set_philo_finished(t_philo *philo)
+{
+	int	ret;
+
+	ret = pthread_mutex_lock(&philo->mutex);
+	if (ret != 0)
+		return (-1);
+	philo->finished = true;
+	ret = pthread_mutex_unlock(&philo->mutex);
+	if (ret != 0)
+		return (-1);
+	return (0);
+}
+
+int	check_philo_finished(t_philo *philo)
+{
+	int	ret;
+	bool	finished;
+
+	ret = pthread_mutex_lock(&philo->mutex);
+	if (ret != 0)
+		return (-1);
+	finished = philo->finished;
+	ret = pthread_mutex_unlock(&philo->mutex);
+	if (ret != 0)
+		return (-1);
+	return ((int)finished);
 }

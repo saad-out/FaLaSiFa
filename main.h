@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/02/29 21:34:40 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/05 18:59:33 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_philo		t_philo;
 struct s_philo
 {
 	int				id;
+	bool			finished;
 	__u_int			last_meal;
 	t_program		*program;
 	t_fork			*first_fork;
@@ -56,6 +57,7 @@ struct s_program
 	long			max_meals;
 	bool			ready;
 	bool			philo_died;
+	bool			err;
 	long			finished;
 	t_philo			**philos;
 	t_fork			**forks;
@@ -81,6 +83,19 @@ int			set_program_finished(t_program *program);
 long		check_program_finished(t_program *program);
 int			set_program_philo_died(t_program *program);
 int			check_program_philo_died(t_program *program);
+
+void		think(t_philo *philo, t_program *program);
+void		sleep_p(t_philo *philo, t_program *program);
+void		eat(t_philo *philo, t_program *program);
+int			ft_usleep(useconds_t time);
+void		get_forks(t_philo *philo, t_program *program);
+void		put_forks(t_philo *philo, t_program *program);
+int			set_philo_last_meal(t_philo *philo);
+void		*monitor_thread(void *arg);
+int			set_philo_finished(t_philo *philo);
+int			check_philo_finished(t_philo *philo);
+void		get_first_fork(t_philo *philo, t_program *program);
+void		get_second_fork(t_philo *philo, t_program *program);
 /* --------- */
 
 #endif /* MAIN_H */
