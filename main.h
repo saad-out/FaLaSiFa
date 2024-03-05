@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/04 18:44:35 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/05 18:59:33 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ int			set_philo_last_meal(t_philo *philo);
 void		*monitor_thread(void *arg);
 int			set_philo_finished(t_philo *philo);
 int			check_philo_finished(t_philo *philo);
+void		get_first_fork(t_philo *philo, t_program *program);
+void		get_second_fork(t_philo *philo, t_program *program);
 /* --------- */
 
 #endif /* MAIN_H */

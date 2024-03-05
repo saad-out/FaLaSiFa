@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 22:51:36 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/04 22:46:02 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/05 18:59:00 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,13 @@ void	*philo_thread(void *arg)
 		pthread_mutex_lock(&program->mutex);
 		program->err = true;
 		pthread_mutex_unlock(&program->mutex);
+		return (NULL);
+	}
+	/* if only one philo, lock first fork and wait time to die */
+	if (program->n_philos == 1)
+	{
+		get_first_fork(philo, program);
+		usleep(program->t_die * 1000);
 		return (NULL);
 	}
 	/* lunch impair philos first */
