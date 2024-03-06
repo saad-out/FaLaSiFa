@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 22:30:37 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/06 18:49:51 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/07 00:25:05 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	philo_process(t_philo *philo)
 
 	printf("child %d started\n", philo->id);
 	program = philo->program;
+	philo->last_meal = get_time();
 	if (philo->id % 2 == 0)
 		usleep(10 * 1000);
 	meals = 0;
@@ -37,7 +38,7 @@ void	philo_process(t_philo *philo)
 		printf("%d has taken second fork\n", philo->id);
 
 		/* eat */
-		printf("%d is eating\n", philo->id);
+		printf("%d is eating for %d\n", philo->id, meals);
 		philo->last_meal = get_time();
 		usleep(program->t_eat * 1000);
 
@@ -59,6 +60,8 @@ void	philo_process(t_philo *philo)
 		meals++;
 	}
 	// printf("philo %d finished...\n", philo->id);
+	philo->finished = 1;
+	philo->program->finished++; // TODO: protect with semaphore
 }
 
 void	start_processes(t_program *program)
@@ -85,6 +88,7 @@ void	start_processes(t_program *program)
 		else
 			philos[i]->pid = pid;
 	}
+	monitor(program);
 	for (__u_int i = 0; i < program->n_philos; i++)
 	{
 		pid = wait(NULL);

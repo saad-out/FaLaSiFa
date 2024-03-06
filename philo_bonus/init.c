@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 16:02:01 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/06 18:28:44 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/07 00:21:19 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_philo	**init_philos(t_program *program)
 			return (clear_philos(philos, i), free(philos), NULL);
 		philos[i]->id = i + 1;
 		philos[i]->program = program;
+		philos[i]->finished = 0;
 
 		philos[i]->sem = program->sem;
 		i++;

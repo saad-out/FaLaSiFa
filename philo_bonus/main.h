@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/06 18:45:49 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/07 00:20:39 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/stat.h>
 # include <semaphore.h>
 # include <sys/wait.h>
+# include <signal.h>
 /* ------- */
 
 /* TYPEDEFS */
@@ -36,6 +37,7 @@ typedef struct s_philo		t_philo;
 struct s_philo
 {
 	int				id;
+	bool			finished;
 	__u_int			last_meal;
 	t_program		*program;
 	sem_t			*sem;
@@ -64,6 +66,7 @@ void		start_processes(t_program *program);
 int			ft_usleep(__u_int time);
 t_philo		**init_philos(t_program *program);
 __u_int		get_time(void);
+void		monitor(t_program *program);
 /* --------- */
 
 #endif /* MAIN_H */

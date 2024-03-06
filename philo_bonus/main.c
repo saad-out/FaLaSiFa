@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 21:46:03 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/06 18:29:36 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/07 00:06:01 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	philosophers(int ac, char **av)
 	if (!philos)
 		return (printf("error creating philos\n"),free(program), exit(EXIT_FAILURE));
 	program->philos = philos;
+	program->finished = 0;
 
 	/* core */
 	// start_processes(program, sem);
