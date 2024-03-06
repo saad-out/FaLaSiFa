@@ -6,19 +6,11 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 19:04:18 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/01 22:01:28 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/06 18:46:23 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
-
-__u_int	get_time(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL); //TODO: handle error
-	return ((__u_int)(time.tv_sec * 1000 + time.tv_usec / 1000));
-}
 
 static int	ft_isspace(char c)
 {
@@ -50,4 +42,22 @@ __u_int	ft_atoerr(const char *nptr, bool *err)
 	if (nptr[i] != '\0')
 		return (*err = 1, 0);
 	return ((__u_int)(result));
+}
+
+int	ft_usleep(__u_int time)
+{
+	__u_int	start;
+
+	start = get_time();
+	while ((get_time() - start) < time)
+		usleep(time / 10);
+	return (0);
+}
+
+__u_int	get_time(void)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL); //TODO: handle error
+	return ((__u_int)(time.tv_sec * 1000 + time.tv_usec / 1000));
 }

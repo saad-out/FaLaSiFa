@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/01 22:43:50 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/06 18:45:49 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 
 /* TYPEDEFS */
 typedef struct s_program	t_program;
-typedef struct s_fork		t_fork;
 typedef struct s_philo		t_philo;
 /* ------- */
 
@@ -39,18 +38,9 @@ struct s_philo
 	int				id;
 	__u_int			last_meal;
 	t_program		*program;
+	sem_t			*sem;
 	pid_t			pid;
-	// t_fork			*first_fork;
-	// t_fork			*second_fork;
-	// pthread_t		thread;
-	// pthread_mutex_t	mutex;
 };
-
-// struct s_fork
-// {
-// 	int				id;
-// 	pthread_mutex_t	mutex;
-// };
 
 struct s_program
 {
@@ -58,21 +48,22 @@ struct s_program
 	__u_int			t_die;
 	__u_int			t_eat;
 	__u_int			t_sleep;
+	sem_t			*sem;
 	long			max_meals;
 	bool			ready;
 	bool			philo_died;
 	long			finished;
 	t_philo			**philos;
-	// t_fork			**forks;
-	// pthread_t		monitor;
-	// pthread_mutex_t	mutex;
 };
 /* ------ */
 
 /* PROTOTYPES */
 t_program	*parse_input(int ac, char **av);
 __u_int		ft_atoerr(const char *nptr, bool *err);
-void		start_processes(t_program *program, sem_t *sem);
+void		start_processes(t_program *program);
+int			ft_usleep(__u_int time);
+t_philo		**init_philos(t_program *program);
+__u_int		get_time(void);
 /* --------- */
 
 #endif /* MAIN_H */

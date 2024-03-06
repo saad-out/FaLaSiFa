@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 21:46:03 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/02 19:20:37 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/03/06 18:29:36 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	philosophers(int ac, char **av)
 {
 	t_program	*program;
+	t_philo		**philos;
 	sem_t		*sem;
 	int			value;
 
@@ -30,9 +31,17 @@ void	philosophers(int ac, char **av)
 	if (sem_getvalue(sem, &value) == -1)
 		return (printf("error getting semaphor\n"),free(program), exit(EXIT_FAILURE));
 	printf("sem value is %d\n", value);
+	program->sem = sem;
+	
+	/* create philos */
+	philos = init_philos(program);
+	if (!philos)
+		return (printf("error creating philos\n"),free(program), exit(EXIT_FAILURE));
+	program->philos = philos;
 
 	/* core */
-	start_processes(program, sem);
+	// start_processes(program, sem);
+	start_processes(program);
 
 	/* cleanup */
 	if (sem_close(sem) == -1)
