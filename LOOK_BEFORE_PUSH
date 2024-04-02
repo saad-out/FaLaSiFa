@@ -3,3 +3,5 @@ if there is a mutex to prevent a philosopher from dying and starting eating at t
 t_die >= passed time not strictly >
 
 remove ./klos
+
+pthread_exit() not allowed

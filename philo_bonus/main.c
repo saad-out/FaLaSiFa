@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 21:46:03 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/07 00:06:01 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/02 21:11:13 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	philosophers(int ac, char **av)
 		return (printf("wrong input\n"), exit(EXIT_FAILURE));
 	
 	/* create semaphore (forks) */
-	sem = sem_open("forks", O_CREAT | O_EXCL, O_RDWR, program->n_philos);
+	sem = sem_open(PROGRAM_SEM_NAME, O_CREAT | O_EXCL, O_RDWR, program->n_philos);
 	if (sem == SEM_FAILED)
 		return (printf("error creating semaphor\n"),free(program), exit(EXIT_FAILURE));
 	if (sem_getvalue(sem, &value) == -1)
@@ -41,14 +41,14 @@ void	philosophers(int ac, char **av)
 	program->finished = 0;
 
 	/* core */
-	// start_processes(program, sem);
 	start_processes(program);
 
 	/* cleanup */
 	if (sem_close(sem) == -1)
 		return (printf("error closing semaphor\n"),free(program), exit(EXIT_FAILURE));
-	if (sem_unlink("forks") == -1)
+	if (sem_unlink(PROGRAM_SEM_NAME) == -1)
 		return (printf("error unlinking semaphor\n"),free(program), exit(EXIT_FAILURE));
+	clear_philos(philos, program->n_philos, true);
 	free(program);
 }
 
