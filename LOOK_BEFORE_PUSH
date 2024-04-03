@@ -5,3 +5,5 @@ t_die >= passed time not strictly >
 remove ./klos
 
 pthread_exit() not allowed
+
+better lock printf() (sem or mutex)
