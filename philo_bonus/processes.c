@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 22:30:37 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/02 23:50:25 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/03 15:12:32 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,16 @@
 
 void	start_threads(t_philo *philo)
 {
+	t_program *program;
 	pthread_t	monitor_t;
 	pthread_t	philo_t;
 	int			ret;
 	void		*ret_value;
 
+	/* init */
+	program = philo->program;
+
+	/* create threads */
 	ret = pthread_create(&philo_t, NULL, philo_thread, (void *)philo);
 	if (ret != 0)
 		perror("pthread_create"), exit(EXIT_FAILURE);
@@ -26,21 +31,26 @@ void	start_threads(t_philo *philo)
 	if (ret != 0)
 		perror("pthread_create"), exit(EXIT_FAILURE);
 
-	printf("philo %d success creating of threads\n", philo->id);
-
+	/* join monitor */
 	ret = pthread_join(monitor_t, &ret_value);
 	if (ret != 0)
 		perror("pthread_join"), exit(EXIT_FAILURE);
-	printf("monitor %d said philo %d exited with %d\n", philo->id, philo->id, *(int *)ret_value);
-	free(ret_value);
-	ret = pthread_detach(philo_t);
+
+	/* join philo */
+	ret = pthread_join(philo_t, NULL);
 	if (ret != 0)
-		perror("pthread_detach"), exit(EXIT_FAILURE);
-	if (sem_close(philo->program->sem) == -1)
-		perror("sem close 1 prog");
+		perror("pthread_join"), exit(EXIT_FAILURE);
+
+	/* cleanup */
 	clear_philos(philo->program->philos, philo->program->n_philos, false);
-	free(philo->program);
-	exit(*((int *)ret_value));
+	if (sem_close(program->sem) == -1)
+		perror("sem close 1 prog");
+	free(program);
+
+	/* exit status */
+	ret = *(int *)ret_value;
+	free(ret_value);
+	exit(ret);
 }
 
 void	start_processes(t_program *program)
@@ -59,7 +69,6 @@ void	start_processes(t_program *program)
 			return (printf("fork error\n"), (void)0);
 		else if (pid == 0)
 		{
-			// philo_thread(philos[i]);
 			start_threads(philos[i]);
 			printf("start_threads should not return\n");
 			exit(EXIT_FAILURE);
