@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 16:02:01 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/03 21:46:39 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/05 00:32:07 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	clear_philos(t_philo **philos, __u_int i, bool parent)
 {
 	__u_int	j;
 
-	printf("===> clear philos parent=%d\n", parent);
+	// printf("===> clear philos parent=%d\n", parent);
 	if (!philos)
 		return ;
 	j = 0;
@@ -37,6 +37,7 @@ t_philo	**init_philos(t_program *program)
 {
 	t_philo	**philos;
 	__u_int	i;
+	char	*colors[] = {RED, GRN, YEL, BLU, MAG, CYN, WHT};
 
 	philos = malloc(sizeof(t_philo *) * program->n_philos);
 	if (!philos)
@@ -51,13 +52,15 @@ t_philo	**init_philos(t_program *program)
 		philos[i]->program = program;
 		philos[i]->finished = 0;
 		philos[i]-> died = 0;
+		philos[i]->pid = 0;
+		philos[i]->color = colors[i % 7];
 
 		// philos[i]->sem = program->sem;
 		char	*id = ft_itoa(i + 1);
 		char	*name = ft_strjoin(PHILO_SEM_NAME, id);
 		philos[i]->name = name;
 		free(id);
-		philos[i]->sem = sem_open(philos[i]->name, O_CREAT | O_EXCL, NULL, 1);
+		philos[i]->sem = sem_open(philos[i]->name, O_CREAT | O_EXCL, O_RDWR, 1);
 		if (philos[i]->sem == SEM_FAILED)
 			return (perror("sem1"), printf("error creating semaphor ph\n"), clear_philos(philos, i, true), NULL);
 	// int va;
