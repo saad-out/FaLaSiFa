@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 16:02:01 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/05 00:32:07 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/05 06:10:26 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ t_philo	**init_philos(t_program *program)
 		char	*name = ft_strjoin(PHILO_SEM_NAME, id);
 		philos[i]->name = name;
 		free(id);
-		philos[i]->sem = sem_open(philos[i]->name, O_CREAT | O_EXCL, O_RDWR, 1);
+		sem_unlink(philos[i]->name);
+		philos[i]->sem = sem_open(philos[i]->name, O_CREAT | O_EXCL, 0777, 1);
 		if (philos[i]->sem == SEM_FAILED)
 			return (perror("sem1"), printf("error creating semaphor ph\n"), clear_philos(philos, i, true), NULL);
 	// int va;

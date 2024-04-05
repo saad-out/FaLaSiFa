@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 22:30:37 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/05 00:34:22 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/05 23:49:07 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ void	start_threads(t_philo *philo)
 	// printf("%s monitor done%s\n", philo->color, RESET);
 
 	/* join philo */
-	// ret = pthread_join(philo_t, NULL);
-	// if (ret != 0)
-	// 	perror("pthread_join"), exit(EXIT_FAILURE);
-	ret = pthread_detach(philo_t);
+	ret = pthread_join(philo_t, NULL);
 	if (ret != 0)
 		perror("pthread_join"), exit(EXIT_FAILURE);
+	// ret = pthread_detach(philo_t);
+	// if (ret != 0)
+	// 	perror("pthread_join"), exit(EXIT_FAILURE);
 	// printf("%s philo done%s\n", philo->color, RESET);
 
 	/* cleanup */
@@ -99,16 +99,24 @@ void	start_processes(t_program *program)
 			// printf("===> CHILD %d exited with %d\n", pid, WEXITSTATUS(status));
 			if (WEXITSTATUS(status) == EXIT_FAILURE)
 			{
-				printf("lets kill\n");
-				// sem_post(program->print_lock);
+				// printf("lets kill\n");
+				// sem_wait(program->print_lock);
 				kill_all_except(philos, program->n_philos, pid);
-				// break ;
+				break ;
 			}
 		}
 		else if (WIFSIGNALED(status))
-			printf("child %d exited due to signal %d\n", pid, WTERMSIG(status));
+		{
+			// printf("child %d exited due to signal %d\n", pid, WTERMSIG(status));
+			kill_all_except(philos, program->n_philos, pid);
+			break ;
+		}
 		else
-			printf("ma3rfanch\n");
+		{
+			// printf("ma3rfanch\n");
+			kill_all_except(philos, program->n_philos, pid);
+			break ;
+		}
 
 		// int	val;
 		// sem_getvalue(program->sem, &val);

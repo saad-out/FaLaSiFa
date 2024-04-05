@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 21:46:03 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/04 23:35:05 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/05 06:10:13 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,26 @@ void	philosophers(int ac, char **av)
 	program = parse_input(ac, av);
 	if (!program)
 		return (printf("wrong input\n"), exit(EXIT_FAILURE));
+
+	if (sem_unlink(PROGRAM_SEM_NAME) == -1)
+		perror("error unlinking semaphor\n");
+	if (sem_unlink(PRINT_LOCK) == -1)
+		perror("error unlinking semaphor\n");
+	if (sem_unlink(FORKS) == -1)
+		perror("error unlinking semaphor\n");
 	
 	/* create semaphore (forks) */
-	sem = sem_open(PROGRAM_SEM_NAME, O_CREAT | O_EXCL, O_RDWR, 1);
+	// sem = sem_open(PROGRAM_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
+	sem = sem_open(PROGRAM_SEM_NAME, O_CREAT, 0777, 1);
 	if (sem == SEM_FAILED)
-		return (printf("error creating semaphor\n"),free(program), exit(EXIT_FAILURE)); // maybe close the prog semaphore
+		return (perror("error creating semaphor1\n"),free(program), exit(EXIT_FAILURE)); // maybe close the prog semaphore
+		// return (printf("error creating semaphor\n"),free(program), exit(EXIT_FAILURE)); // maybe close the prog semaphore
 	program->var_lock = sem;
-	sem = sem_open(FORKS, O_CREAT | O_EXCL, O_RDWR, program->n_philos);
+	sem = sem_open(FORKS, O_CREAT | O_EXCL, 0777, program->n_philos);
 	if (sem == SEM_FAILED)
 		return (printf("error creating semaphor\n"),free(program), exit(EXIT_FAILURE));
 	program->forks = sem;
-	sem = sem_open(PRINT_LOCK, O_CREAT | O_EXCL, O_RDWR, 1);
+	sem = sem_open(PRINT_LOCK, O_CREAT | O_EXCL, 0777, 1);
 	if (sem == SEM_FAILED)
 		return (printf("error creating semaphor\n"),free(program), exit(EXIT_FAILURE)); // maybe close the prog semaphore
 	program->print_lock = sem;
@@ -52,16 +61,10 @@ void	philosophers(int ac, char **av)
 	/* cleanup */
 	if (sem_close(program->var_lock) == -1)
 		printf("error closing semaphor\n");
-	if (sem_unlink(PROGRAM_SEM_NAME) == -1)
-		printf("error unlinking semaphor\n");
 	if (sem_close(program->print_lock) == -1)
 		printf("error closing semaphor\n");
-	if (sem_unlink(PRINT_LOCK) == -1)
-		printf("error unlinking semaphor\n");
 	if (sem_close(program->forks) == -1)
 		printf("error closing semaphor\n");
-	if (sem_unlink(FORKS) == -1)
-		printf("error unlinking semaphor\n");
 	clear_philos(philos, program->n_philos, true);
 	free(program);
 }
