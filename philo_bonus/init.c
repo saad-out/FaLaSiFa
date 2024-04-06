@@ -6,37 +6,67 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 16:02:01 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 02:15:38 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 10:55:42 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	clear_philos(t_philo **philos, __u_int i, bool parent)
+static char	*get_name(__u_int i)
 {
-	__u_int	j;
+	char	*id;
+	char	*name;
 
-	if (!philos)
-		return ;
-	j = 0;
-	while (j < i)
+	id = ft_itoa(i + 1);
+	if (!id)
+		return (ft_putendl_fd(MALLOC_ERROR, STDERR_FILENO), NULL);
+	name = ft_strjoin(PHILO_SEM_NAME, id);
+	if (!name)
+		ft_putendl_fd(MALLOC_ERROR, STDERR_FILENO);
+	free(id);
+	return (name);
+}
+
+static void	init_colors(char **colors)
+{
+	colors[0] = RED;
+	colors[1] = GRN;
+	colors[2] = YEL;
+	colors[3] = BLU;
+	colors[4] = MAG;
+	colors[5] = CYN;
+	colors[6] = WHT;
+}
+
+static t_philo	*init_philo(t_philo *philo, __u_int i, t_program *program)
+{
+	char	*colors[7];
+
+	init_colors(colors);
+	philo->id = i + 1;
+	philo->program = program;
+	philo->finished = 0;
+	philo->died = 0;
+	philo->pid = 0;
+	philo->color = colors[i % 7];
+	philo->last_meal = get_time();
+	philo->name = get_name(i);
+	if (!philo->name)
+		return (free(philo), NULL);
+	sem_unlink(philo->name);
+	philo->sem = sem_open(philo->name, O_CREAT | O_EXCL, 0777, 1);
+	if (philo->sem == SEM_FAILED)
 	{
-		if (sem_close(philos[j]->sem) == -1)
-			perror("sem close 2");
-		if (parent && sem_unlink(philos[j]->name) == -1)
-			perror("sem unlink 2");
-		free(philos[j]->name);
-		free(philos[j]);
-		j++;
+		ft_putendl_fd(SEM_OPEN_ERROR, STDERR_FILENO);
+		return (free(philo->name), free(philo), NULL);
 	}
-	free(philos);
+	return (philo);
 }
 
 t_philo	**init_philos(t_program *program)
 {
 	t_philo	**philos;
 	__u_int	i;
-	char	*colors[] = {RED, GRN, YEL, BLU, MAG, CYN, WHT};
 
 	philos = malloc(sizeof(t_philo *) * program->n_philos);
 	if (!philos)
@@ -47,22 +77,9 @@ t_philo	**init_philos(t_program *program)
 		philos[i] = malloc(sizeof(t_philo));
 		if (!philos[i])
 			return (clear_philos(philos, i, true), NULL);
-		philos[i]->id = i + 1;
-		philos[i]->program = program;
-		philos[i]->finished = 0;
-		philos[i]-> died = 0;
-		philos[i]->pid = 0;
-		philos[i]->color = colors[i % 7];
-		philos[i]->last_meal = get_time();
-
-		char	*id = ft_itoa(i + 1);
-		char	*name = ft_strjoin(PHILO_SEM_NAME, id);
-		philos[i]->name = name;
-		free(id);
-		sem_unlink(philos[i]->name);
-		philos[i]->sem = sem_open(philos[i]->name, O_CREAT | O_EXCL, 0777, 1);
-		if (philos[i]->sem == SEM_FAILED)
-			return (perror("sem1"), printf("error creating semaphor ph\n"), clear_philos(philos, i, true), NULL);
+		philos[i] = init_philo(philos[i], i, program);
+		if (!philos[i])
+			return (clear_philos(philos, i, true), NULL);
 		i++;
 	}
 	return (philos);

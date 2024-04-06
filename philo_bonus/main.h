@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 03:57:12 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 11:17:20 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,30 @@
 #  define THINK_TIME 1
 # endif /* THINK_TIME */
 
+# ifndef SEM_OPEN_ERROR
+#  define SEM_OPEN_ERROR "error creating semaphore"
+# endif /* SEM_OPEN_ERROR */
+
+# ifndef SEM_CLOSE_ERROR
+#  define SEM_CLOSE_ERROR "error closing semaphor"
+# endif /* SEM_CLOSE_ERROR */
+
+# ifndef SEM_UNLINK_ERROR
+#  define SEM_UNLINK_ERROR "error unlinking semaphore"
+# endif /* SEM_UNLINK_ERROR */
+
+# ifndef MALLOC_ERROR
+#  define MALLOC_ERROR "malloc() error"
+# endif /* MALLOC_ERROR */
+
+# ifndef P_CREATE_ERROR
+#  define P_CREATE_ERROR "pthread_create() error"
+# endif /* PTHREAD_CREATE_ERROR */
+
+# ifndef P_JOIN_ERROR
+#  define P_JOIN_ERROR "pthread_join() error"
+# endif /* PTHREAD_JOIN_ERROR */
+
 #define RED   "\x1B[31m"
 #define GRN   "\x1B[32m"
 #define YEL   "\x1B[33m"
@@ -100,7 +124,6 @@ struct s_program
 	sem_t			*var_lock;
 	sem_t			*print_lock;
 	long			max_meals;
-	bool			ready;
 	bool			philo_died;
 	bool			error;
 	long			finished;
@@ -143,6 +166,8 @@ void	set_program_error(t_program *program);
 int		check_program_error(t_program *program);
 
 void	kill_all_except(t_philo **philos, __u_int n, pid_t exception);
+
+void	close_program_semaphores(t_program *program);
 /* --------- */
 
 #endif /* MAIN_H */

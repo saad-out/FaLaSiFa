@@ -6,11 +6,27 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 21:54:29 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 00:11:46 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 10:26:43 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+
+static t_program	*set_max_meals(t_program *program, char *av)
+{
+	bool	err;
+
+	if (av)
+	{
+		err = 0;
+		program->max_meals = (long)ft_atoerr(av, &err);
+		if (err)
+			return (free(program), NULL);
+	}
+	else
+		program->max_meals = -1;
+	return (program);
+}
 
 t_program	*parse_input(int ac, char **av)
 {
@@ -34,13 +50,5 @@ t_program	*parse_input(int ac, char **av)
 	program->t_sleep = ft_atoerr(av[3], &err);
 	if (err)
 		return (free(program), NULL);
-	if (av[4])
-	{
-		program->max_meals = (long)ft_atoerr(av[4], &err);
-		if (err)
-			return (free(program), NULL);
-	}
-	else
-		program->max_meals = -1;
-	return (program);
+	return (set_max_meals(program, av[4]));
 }
