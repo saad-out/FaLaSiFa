@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/05 06:10:51 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 03:57:12 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ t_philo		**init_philos(t_program *program);
 __u_int		get_time(void);
 void		monitor(t_program *program);
 void		clear_philos(t_philo **philos, __u_int i, bool parent);
+void		philosophers(int ac, char **av);
 
 void*	monitor_thread(void *arg);
 void*	philo_thread(void *arg);
