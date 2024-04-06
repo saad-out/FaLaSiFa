@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 14:12:38 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 01:29:21 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 03:36:39 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,12 @@ bool	get_forks(t_philo *philo, t_program *program)
 
 	/* SECOND FORK */
 	// printf("let's get second fork %d\n", philo->id);
+	if (program->n_philos == 1)
+	{
+		while (check_philo_died(philo) != 1)
+			ft_usleep(60 * 1000);
+		return (0);
+	}
 	if (safe_sem(program->forks, WAIT, program) == -1)
 		return (0);
 	
