@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 21:19:01 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/05 23:50:59 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 02:23:48 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,10 @@ void*	monitor_thread(void *arg)
 		{
 			set_philo_died(philo);
 			sem_wait(program->print_lock);
-			printf("%sphilo %d DIED (last meal => %u ms ago)%s\n",philo->color, philo->id, get_time() - philo->last_meal, RESET);
+			// printf("%sphilo %d DIED (last meal => %u ms ago)%s\n",philo->color, philo->id, get_time() - philo->last_meal, RESET);
+			printf("%s%u %d died%s\n",philo->color, get_time(), philo->id, RESET);
 			died = 1;
-			kill(getpid(), SIGINT);
-			// int val;
-			// sem_getvalue(program->print_lock, &val);
-			// printf("--------------- SEMVAL is %d\n", val);
-			// write(1, "cant print\n", sizeof("cant print\n"));
+			// kill(getpid(), SIGKILL);
 			break ;
 		}
 		ft_usleep(5 * 1000);
@@ -66,11 +63,6 @@ void*	monitor_thread(void *arg)
 	else
 		*ret_value = EXIT_SUCCESS;
 
-	/* return value */
-	// if (died)
-	// 	*ret_value = EXIT_FAILURE;
-	// *ret_value = EXIT_SUCCESS;
-	// printf("%s&&&&&&&&&&&& MONITOR %d GOING TO EXIT WITH %d%s\n",philo->color, philo->id, *ret_value, RESET);
 	return ((void *)ret_value);
 }
 
@@ -88,16 +80,9 @@ void*	philo_thread(void *arg)
 	if (set_philo_last_meal(philo) == -1)
 		return (NULL);
 
-	/* debug */
-	// printf("slm2\n");
-	// died = 0;
-	// if (!died)
-	// 	return (printf("philo thread %d ended\n", philo->id), NULL);
-	// printf("=> philo %d\n", philo->id);
-
 	/* delay pair */
 	if (philo->id % 2 == 0)
-		ft_usleep(2 * 1000);
+		ft_usleep(50 * 1000);
 
 	/* core */
 	while (program->max_meals == -1 || meals < program->max_meals)
@@ -115,7 +100,6 @@ void*	philo_thread(void *arg)
 		if (!think(philo, program))
 			break ;
 	}
-	// printf("%sphilo %d finished%s\n", philo->color, philo->id, RESET);
 	if (check_philo_died(philo) != 1)
 		set_philo_finished(philo);
 	// else

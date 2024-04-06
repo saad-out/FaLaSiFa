@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 00:18:28 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/07 00:29:57 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 00:12:27 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 bool	philo_dead(t_program *program)
 {
-	int		i;
-	int		ret;
+	__u_int	i;
 	bool	died;
 	__u_int	time;
 

@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:31:02 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/05 23:55:12 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 01:53:22 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ void	kill_all_except(t_philo **philos, __u_int n, pid_t exception)
 	for (__u_int i = 0; i < n; i++)
 	{
 		if (philos[i]->pid != exception)
-			kill(philos[i]->pid, SIGINT);
+			kill(philos[i]->pid, SIGKILL);
 	}
 }

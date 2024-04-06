@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 21:54:29 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/01 21:57:07 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 00:11:46 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ t_program	*parse_input(int ac, char **av)
 	t_program	*program;
 	bool		err;
 
+	(void)ac;
 	program = (t_program *)malloc(sizeof(t_program));
 	if (!program)
 		return (printf("malloc error\n"), exit(EXIT_FAILURE), NULL);

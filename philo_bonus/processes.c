@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 22:30:37 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/05 23:49:07 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 02:22:53 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	start_threads(t_philo *philo)
 	ret = pthread_join(monitor_t, &ret_value);
 	if (ret != 0)
 		perror("pthread_join"), exit(EXIT_FAILURE);
-	// printf("%s monitor done%s\n", philo->color, RESET);
 
 	/* join philo */
 	ret = pthread_join(philo_t, NULL);
@@ -47,9 +46,6 @@ void	start_threads(t_philo *philo)
 	// printf("%s philo done%s\n", philo->color, RESET);
 
 	/* cleanup */
-	// printf("===> philo %d done\n", philo->id);
-	int id = philo->id;
-	char *color = philo->color;
 	clear_philos(philo->program->philos, philo->program->n_philos, false);
 	if (sem_close(program->var_lock) == -1)
 		perror("sem close 1 prog");
@@ -69,11 +65,9 @@ void	start_threads(t_philo *philo)
 void	start_processes(t_program *program)
 {
 	pid_t	pid;
-	// sem_t	*sem;
 	t_philo	**philos;
 	int		status;
 
-	// sem = program->sem;
 	philos = program->philos;
 	for (__u_int i = 0; i < program->n_philos; i++)
 	{
@@ -94,32 +88,9 @@ void	start_processes(t_program *program)
 		pid = waitpid(-1, &status, 0);
 		if (pid == -1)
 			perror("waitpid"), exit(EXIT_FAILURE); // TODO: clear resources
-		if (WIFEXITED(status))
-		{
-			// printf("===> CHILD %d exited with %d\n", pid, WEXITSTATUS(status));
-			if (WEXITSTATUS(status) == EXIT_FAILURE)
-			{
-				// printf("lets kill\n");
-				// sem_wait(program->print_lock);
-				kill_all_except(philos, program->n_philos, pid);
-				break ;
-			}
-		}
-		else if (WIFSIGNALED(status))
-		{
-			// printf("child %d exited due to signal %d\n", pid, WTERMSIG(status));
-			kill_all_except(philos, program->n_philos, pid);
-			break ;
-		}
+		if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
+			continue;
 		else
-		{
-			// printf("ma3rfanch\n");
-			kill_all_except(philos, program->n_philos, pid);
-			break ;
-		}
-
-		// int	val;
-		// sem_getvalue(program->sem, &val);
-		// printf("=======> SEM VALUE AFTER CHILD EXITED %d\n", val);
+			return (kill_all_except(philos, program->n_philos, pid));
 	}
 }

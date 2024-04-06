@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 21:46:03 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/05 06:10:13 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 00:11:17 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	philosophers(int ac, char **av)
 	t_program	*program;
 	t_philo		**philos;
 	sem_t		*sem;
-	int			value;
 
 	/* parsing */
 	program = parse_input(ac, av);
