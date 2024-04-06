@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 20:57:45 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 03:36:57 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 03:49:59 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	ft_usleep(__u_int time)
 {
 	__u_int	start;
 
-	time /= 1000;
 	start = get_time();
 	while ((get_time() - start) < time)
 		usleep(60);

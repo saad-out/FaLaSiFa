@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 14:12:38 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 03:36:39 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 03:48:07 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool	eat(t_philo *philo, t_program *program)
 		return (0);
 	if (set_philo_last_meal(philo) == -1)
 		return (perror("eat sem\n"), 0);
-	ft_usleep(program->t_eat * 1000);
+	ft_usleep(program->t_eat);
 	return (1);
 }
 
@@ -55,7 +55,7 @@ bool	think(t_philo *philo, t_program *program)
 	if (safe_sem(program->print_lock, POST, program) == -1)
 		return (0);
 	// force thinking to avoid starvation
-	ft_usleep(THINK_TIME * 1000);
+	ft_usleep(THINK_TIME);
 	return (1);
 }
 
@@ -77,7 +77,7 @@ bool	sleep_p(t_philo *philo, t_program *program)
 	printf("%s%u %d is sleeping%s\n",philo->color, get_time(), philo->id, RESET);
 	if (safe_sem(program->print_lock, POST, program) == -1)
 		return (0);
-	ft_usleep(program->t_sleep * 1000);
+	ft_usleep(program->t_sleep);
 	return (1);
 }
 
@@ -162,7 +162,7 @@ bool	get_forks(t_philo *philo, t_program *program)
 	if (program->n_philos == 1)
 	{
 		while (check_philo_died(philo) != 1)
-			ft_usleep(60 * 1000);
+			ft_usleep(60);
 		return (0);
 	}
 	if (safe_sem(program->forks, WAIT, program) == -1)

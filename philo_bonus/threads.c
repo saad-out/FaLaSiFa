@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 21:19:01 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 03:27:37 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/06 03:48:41 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void*	monitor_thread(void *arg)
 
 	/* delay pair */
 	if (philo->id % 2 == 0)
-		ft_usleep(2 * 1000);
+		ft_usleep(2);
 	/* delay from philo */
-	ft_usleep(2 * 1000);
+	ft_usleep(2);
 
 	/* core */
 	while (!died)
@@ -51,7 +51,7 @@ void*	monitor_thread(void *arg)
 			// kill(getpid(), SIGKILL);
 			break ;
 		}
-		ft_usleep(5 * 1000);
+		ft_usleep(5);
 	}
 	// if (died)
 	// 	printf("======> MONITOR %d says dead\n", philo->id);
@@ -82,7 +82,7 @@ void*	philo_thread(void *arg)
 
 	/* delay pair */
 	if (philo->id % 2 == 0)
-		ft_usleep(50 * 1000);
+		ft_usleep(50);
 
 	/* core */
 	while (program->max_meals == -1 || meals < program->max_meals)
