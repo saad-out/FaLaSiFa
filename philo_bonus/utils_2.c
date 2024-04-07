@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 20:57:45 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 03:49:59 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/07 00:44:12 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ __u_int	get_time(void)
 {
 	struct timeval	time;
 
-	gettimeofday(&time, NULL); //TODO: handle error
+	if (gettimeofday(&time, NULL) == -1)
+	{
+		ft_putendl_fd("gettimeofday() error", STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
 	return ((__u_int)(time.tv_sec * 1000 + time.tv_usec / 1000));
 }

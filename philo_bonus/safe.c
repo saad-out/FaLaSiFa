@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 17:31:02 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 01:53:22 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/07 00:42:10 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 void	set_program_error(t_program *program)
 {
-	// sem_wait(program->sem);
 	program->error = true;
-	// sem_post(program->sem);
 }
 
 int	check_program_error(t_program *program)
@@ -53,10 +51,13 @@ int	safe_sem(sem_t *sem, int action, t_program *program)
 
 void	kill_all_except(t_philo **philos, __u_int n, pid_t exception)
 {
-	// printf("killing all except %d\n", exception);
-	for (__u_int i = 0; i < n; i++)
+	__u_int	i;
+
+	i = 0;
+	while (i < n)
 	{
 		if (philos[i]->pid != exception)
 			kill(philos[i]->pid, SIGKILL);
+		i++;
 	}
 }

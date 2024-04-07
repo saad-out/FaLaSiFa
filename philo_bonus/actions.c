@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 14:12:38 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 03:48:07 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/07 00:37:33 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,67 +14,57 @@
 
 bool	eat(t_philo *philo, t_program *program)
 {
+	char	*color;
+	int		id;
+
 	if (check_program_error(program))
 		return (0);
-	if (check_philo_died(philo) != 1)
-	{
-		// printf("===> EAT => philo %d not died\n", philo->id);
-		safe_sem(program->print_lock, WAIT, program);
-	}
-	else
-	{
-		// printf("===> EAT => philo %d died\n", philo->id);
+	if (check_philo_died(philo) == 1)
 		return (0);
-	}
-	// printf("%sphilo %d started eating (last meal => %u ms ago)%s\n",philo->color, philo->id, get_time() - philo->last_meal, RESET);
-	printf("%s%u %d is eating%s\n",philo->color, get_time(), philo->id, RESET);
+	safe_sem(program->print_lock, WAIT, program);
+	id = philo->id;
+	color = philo->color;
+	printf("%s%u %d is eating%s\n", color, get_time(), id, RESET);
 	if (safe_sem(program->print_lock, POST, program) == -1)
 		return (0);
 	if (set_philo_last_meal(philo) == -1)
-		return (perror("eat sem\n"), 0);
+		return (ft_putendl_fd("Error setting last meal time", 2), 0);
 	ft_usleep(program->t_eat);
 	return (1);
 }
 
 bool	think(t_philo *philo, t_program *program)
 {
+	char	*color;
+	int		id;
+
 	if (check_program_error(program))
 		return (0);
-	if (check_philo_died(philo) != 1)
-	{
-		// printf("===> THINK => philo %d not died\n", philo->id);
-		safe_sem(program->print_lock, WAIT, program);
-	}
-	else
-	{
-		// printf("===> THINK => philo %d died\n", philo->id);
+	if (check_philo_died(philo) == 1)
 		return (0);
-	}
-	// printf("%sphilo %d is thinking%s\n", philo->color, philo->id, RESET);
-	printf("%s%u %d is thinking%s\n",philo->color, get_time(), philo->id, RESET);
+	safe_sem(program->print_lock, WAIT, program);
+	id = philo->id;
+	color = philo->color;
+	printf("%s%u %d is thinking%s\n", color, get_time(), id, RESET);
 	if (safe_sem(program->print_lock, POST, program) == -1)
 		return (0);
-	// force thinking to avoid starvation
 	ft_usleep(THINK_TIME);
 	return (1);
 }
 
 bool	sleep_p(t_philo *philo, t_program *program)
 {
+	char	*color;
+	int		id;
+
 	if (check_program_error(program))
 		return (0);
-	if (check_philo_died(philo) != 1)
-	{
-		// printf("===> SLEEP => philo %d not died\n", philo->id);
-		safe_sem(program->print_lock, WAIT, program);
-	}
-	else
-	{
-		// printf("===> SLEEP => philo %d died\n", philo->id);
+	if (check_philo_died(philo) == 1)
 		return (0);
-	}
-	// printf("%sphilo %d is sleeping%s\n", philo->color, philo->id, RESET);
-	printf("%s%u %d is sleeping%s\n",philo->color, get_time(), philo->id, RESET);
+	safe_sem(program->print_lock, WAIT, program);
+	id = philo->id;
+	color = philo->color;
+	printf("%s%u %d is sleeping%s\n", color, get_time(), id, RESET);
 	if (safe_sem(program->print_lock, POST, program) == -1)
 		return (0);
 	ft_usleep(program->t_sleep);
@@ -85,106 +75,18 @@ bool	put_forks(t_philo *philo, t_program *program)
 {
 	if (check_program_error(program))
 		return (0);
-
-	/*FIRST FORK*/
 	if (safe_sem(program->forks, POST, program) == -1)
 		return (0);
-
-	if (check_program_error(program))
+	if (check_program_error(program) || check_philo_died(philo) == 1)
 		return (0);
-	if (check_philo_died(philo) != 1)
-	{
-		// printf("===> PUT FORKS => philo %d not died\n", philo->id);
-		safe_sem(program->print_lock, WAIT, program);
-	}
-	else
-	{
-		// printf("===> PUT FORKS => philo %d died\n", philo->id);
-		return (0);
-	}
-	// printf("%sphilo %d PUT first fork%s\n",philo->color,	philo->id, RESET);
-	if (safe_sem(program->print_lock, POST, program) == -1)
-		return (0);
-
-	/* SECOND FORK */
 	if (safe_sem(program->forks, POST, program) == -1)
 		return (0);
-	
-	if (check_program_error(program))
-		return (0);
-	if (check_philo_died(philo) != 1)
-	{
-		// printf("===> PUT FORKS => philo %d not died\n", philo->id);
-		safe_sem(program->print_lock, WAIT, program);
-	}
-	else
-	{
-		// printf("===> PUT FORKS => philo %d died\n", philo->id);
-		return (0);
-	}
-	// printf("%sphilo %d PUT second fork%s\n",philo->color, philo->id, RESET);
-	if (safe_sem(program->print_lock, POST, program) == -1)
+	if (check_program_error(program) || check_philo_died(philo) == 1)
 		return (0);
 	return (1);
 }
 
 bool	get_forks(t_philo *philo, t_program *program)
 {
-	if (check_program_error(program))
-		return (0);
-
-	/*FIRST FORK*/
-	// printf("let's get first fork %d\n", philo->id);
-	if (safe_sem(program->forks, WAIT, program) == -1)
-		return (0);
-
-	if (check_program_error(program))
-		return (0);
-		// return (printf("kayn mochkil\n"), 0);
-	// printf("chdha %d\n", philo->id);
-	if (check_philo_died(philo) != 1)
-	{
-		// printf("===> GET FORKS => philo %d not died\n", philo->id);
-		safe_sem(program->print_lock, WAIT, program);
-	}
-	else
-	{
-		// printf("===> GET FORKS => philo %d died\n", philo->id);
-		return (0);
-	}
-	// printf("%sphilo %d HAS TAKEN first fork%s\n",philo->color, philo->id, RESET);
-	printf("%s%u %d has taken a fork%s\n",philo->color, get_time(), philo->id, RESET);
-	if (safe_sem(program->print_lock, POST, program) == -1)
-		return (0);
-
-	/* SECOND FORK */
-	// printf("let's get second fork %d\n", philo->id);
-	if (program->n_philos == 1)
-	{
-		while (check_philo_died(philo) != 1)
-			ft_usleep(60);
-		return (0);
-	}
-	if (safe_sem(program->forks, WAIT, program) == -1)
-		return (0);
-	
-	if (check_program_error(program))
-		return (0);
-		// return (printf("kayn mochkil\n"), 0);
-	// printf("chdha %d\n", philo->id);
-	if (check_philo_died(philo) != 1)
-	{
-		// printf("===> GET FORKS => philo %d not died\n", philo->id);
-		safe_sem(program->print_lock, WAIT, program);
-	}
-	else
-	{
-		// printf("===> GET FORKS => philo %d died\n", philo->id);
-		return (0);
-	}
-	// printf("%sphilo %d HAS TAKEN second fork%s\n",philo->color, philo->id, RESET);
-	printf("%s%u %d has taken a fork%s\n",philo->color, get_time(), philo->id, RESET);
-	if (safe_sem(program->print_lock, POST, program) == -1)
-		return (0);
-	return (1);
+	return (get_first_fork(philo, program) && get_second_fork(philo, program));
 }
