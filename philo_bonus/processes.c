@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 22:30:37 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 23:39:02 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/07 01:54:58 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ static void	create_threads(t_philo *philo, pthread_t *pt, pthread_t *mt)
 	}
 }
 
-static void	join_threads(pthread_t pt, pthread_t mt, void *ret_value)
+static void	join_threads(pthread_t pt, pthread_t mt, void **ret_value)
 {
 	int	ret;
 
-	ret = pthread_join(mt, &ret_value);
+	ret = pthread_join(mt, ret_value);
 	if (ret != 0)
 	{
 		ft_putendl_fd(P_JOIN_ERROR, STDERR_FILENO);
@@ -59,7 +59,7 @@ void	start_threads(t_philo *philo)
 	program = philo->program;
 	ret_value = NULL;
 	create_threads(philo, &philo_t, &monitor_t);
-	join_threads(philo_t, monitor_t, ret_value);
+	join_threads(philo_t, monitor_t, &ret_value);
 	clear_philos(philo->program->philos, philo->program->n_philos, false);
 	if (sem_close(program->var_lock) == -1)
 		ft_putendl_fd(SEM_CLOSE_ERROR, STDERR_FILENO);
@@ -118,9 +118,8 @@ void	start_processes(t_program *program)
 			exit(EXIT_FAILURE);
 		}
 		if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS)
-			continue ;
+			i++;
 		else
 			return (kill_all_except(philos, program->n_philos, pid));
-		i++;
 	}
 }
