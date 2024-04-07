@@ -6,33 +6,24 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 21:19:01 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 03:48:41 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/07 00:02:06 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void*	monitor_thread(void *arg)
+static void	print_died(t_philo *philo)
 {
-	t_philo		*philo;
-	t_program	*program;
-	bool		died;
-	__u_int		time;
-	int			*ret_value;
-	bool		err;
+	printf("%s%u %d died%s\n", philo->color, get_time(), philo->id, RESET);
+}
 
-	/* init */
-	philo = (t_philo *)arg;
-	program = philo->program;
-	died = 0;
+static bool	track_philo(t_philo *philo, t_program *program)
+{
+	bool	died;
+	bool	err;
+	__u_int	time;
 
-	/* delay pair */
-	if (philo->id % 2 == 0)
-		ft_usleep(2);
-	/* delay from philo */
-	ft_usleep(2);
-
-	/* core */
+	died = false;
 	while (!died)
 	{
 		if (check_philo_finished(philo) != 0)
@@ -45,46 +36,44 @@ void*	monitor_thread(void *arg)
 		{
 			set_philo_died(philo);
 			sem_wait(program->print_lock);
-			// printf("%sphilo %d DIED (last meal => %u ms ago)%s\n",philo->color, philo->id, get_time() - philo->last_meal, RESET);
-			printf("%s%u %d died%s\n",philo->color, get_time(), philo->id, RESET);
+			print_died(philo);
 			died = 1;
-			// kill(getpid(), SIGKILL);
 			break ;
 		}
 		ft_usleep(5);
 	}
-	// if (died)
-	// 	printf("======> MONITOR %d says dead\n", philo->id);
+	return (died);
+}
+
+void	*monitor_thread(void *arg)
+{
+	t_philo		*philo;
+	t_program	*program;
+	bool		died;
+	int			*ret_value;
+
+	philo = (t_philo *)arg;
+	program = philo->program;
+	ft_usleep(5);
+	died = track_philo(philo, program);
 	ret_value = malloc(sizeof(int));
 	if (!ret_value)
-		return (ft_putendl_fd("error malloc()", 2), (void *)EXIT_FAILURE); //TODO: wrong as ret is not allocated
+	{
+		ft_putendl_fd(MALLOC_ERROR, STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
 	if (died)
 		*ret_value = EXIT_FAILURE;
 	else
 		*ret_value = EXIT_SUCCESS;
-
 	return ((void *)ret_value);
 }
 
-void*	philo_thread(void *arg)
+static void	simulation(t_philo *philo, t_program *program)
 {
-	t_philo		*philo;
-	t_program	*program;
 	long		meals;
 
-	/* init */
-	philo = (t_philo *)arg;
-	program = philo->program;
 	meals = 0;
-	// printf("*************dkhl%d\n", philo->id);
-	if (set_philo_last_meal(philo) == -1)
-		return (NULL);
-
-	/* delay pair */
-	if (philo->id % 2 == 0)
-		ft_usleep(50);
-
-	/* core */
 	while (program->max_meals == -1 || meals < program->max_meals)
 	{
 		if (!get_forks(philo, program))
@@ -100,9 +89,21 @@ void*	philo_thread(void *arg)
 		if (!think(philo, program))
 			break ;
 	}
+}
+
+void	*philo_thread(void *arg)
+{
+	t_philo		*philo;
+	t_program	*program;
+
+	philo = (t_philo *)arg;
+	program = philo->program;
+	if (set_philo_last_meal(philo) == -1)
+		return (NULL);
+	if (philo->id % 2 == 0)
+		ft_usleep(50);
+	simulation(philo, program);
 	if (check_philo_died(philo) != 1)
 		set_philo_finished(philo);
-	// else
-	// 	printf("%s==========> I AM %d DEAD%s\n", philo->color, philo->id, RESET);
 	return (NULL);
 }
