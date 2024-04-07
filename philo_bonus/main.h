@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 11:17:20 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/07 03:34:07 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,24 @@
 # include <semaphore.h>
 # include <sys/wait.h>
 # include <signal.h>
-#include <sys/types.h>
-# include "libft.h"
+# include <sys/types.h>
 /* ------- */
 
 /* MARCOS */
 # ifndef PROGRAM_SEM_NAME
-#  define PROGRAM_SEM_NAME "program2"
+#  define PROGRAM_SEM_NAME "program"
 # endif /* PROGRAM_SEM_NAME */
 
 # ifndef FORKS
-#  define FORKS "forks2"
+#  define FORKS "forks"
 # endif /* FORKS */
 
 # ifndef PRINT_LOCK
-#  define PRINT_LOCK "printf2"
+#  define PRINT_LOCK "printf"
 # endif /* PRINT_LOCK */
 
 # ifndef PHILO_SEM_NAME
-#  define PHILO_SEM_NAME "philos2"
+#  define PHILO_SEM_NAME "philos"
 # endif /* PHILO_SEM_NAME */
 
 # ifndef POST
@@ -83,22 +82,43 @@
 #  define P_JOIN_ERROR "pthread_join() error"
 # endif /* PTHREAD_JOIN_ERROR */
 
-#define RED   "\x1B[31m"
-#define GRN   "\x1B[32m"
-#define YEL   "\x1B[33m"
-#define BLU   "\x1B[34m"
-#define MAG   "\x1B[35m"
-#define CYN   "\x1B[36m"
-#define WHT   "\x1B[37m"
-#define RESET "\x1B[0m"
+# ifndef RED
+#  define RED "\x1B[31m"
+# endif /* RED */
+
+# ifndef GRN
+#  define GRN "\x1B[32m"
+# endif /* GRN */
+
+# ifndef YEL
+#  define YEL "\x1B[33m"
+# endif /* YEL */
+
+# ifndef BLU
+#  define BLU "\x1B[34m"
+# endif /* BLU */
+
+# ifndef MAG
+#  define MAG "\x1B[35m"
+# endif /* MAG */
+
+# ifndef CYN
+#  define CYN "\x1B[36m"
+# endif /* CYN */
+
+# ifndef WHT
+#  define WHT "\x1B[37m"
+# endif /* WHT */
+
+# ifndef RESET
+#  define RESET "\x1B[0m"
+# endif /* RESET */
 /* ----- */
 
 /* TYPEDEFS */
 typedef struct s_program	t_program;
 typedef struct s_philo		t_philo;
 /* ------- */
-
-typedef unsigned int	__u_int;
 
 /* STRUCTS */
 struct s_philo
@@ -138,36 +158,32 @@ void		start_processes(t_program *program);
 int			ft_usleep(__u_int time);
 t_philo		**init_philos(t_program *program);
 __u_int		get_time(void);
-void		monitor(t_program *program);
 void		clear_philos(t_philo **philos, __u_int i, bool parent);
 void		philosophers(int ac, char **av);
-
-void*	monitor_thread(void *arg);
-void*	philo_thread(void *arg);
-
-bool	eat(t_philo *philo, t_program *program);
-bool	think(t_philo *philo, t_program *program);
-bool	sleep_p(t_philo *philo, t_program *program);
-bool	put_forks(t_philo *philo, t_program *program);
-bool	get_forks(t_philo *philo, t_program *program);
-
-int		set_philo_last_meal(t_philo *philo);
-__u_int	get_philo_last_meal(t_philo *philo);
-int		set_philo_finished(t_philo *philo);
-int		check_philo_finished(t_philo *philo);
-int		set_philo_died(t_philo *philo);
-int		check_philo_died(t_philo *philo);
-__u_int	get_time_since_last_meal(t_philo *philo, bool *err);
-int		set_program_philo_died(t_program *program);
-int		check_program_philo_died(t_program *program);
-
-int		safe_sem(sem_t *sem, int action, t_program *program);
-void	set_program_error(t_program *program);
-int		check_program_error(t_program *program);
-
-void	kill_all_except(t_philo **philos, __u_int n, pid_t exception);
-
-void	close_program_semaphores(t_program *program);
+void		*monitor_thread(void *arg);
+void		*philo_thread(void *arg);
+bool		eat(t_philo *philo, t_program *program);
+bool		think(t_philo *philo, t_program *program);
+bool		sleep_p(t_philo *philo, t_program *program);
+bool		put_forks(t_philo *philo, t_program *program);
+bool		get_forks(t_philo *philo, t_program *program);
+int			set_philo_last_meal(t_philo *philo);
+__u_int		get_philo_last_meal(t_philo *philo);
+int			set_philo_finished(t_philo *philo);
+int			check_philo_finished(t_philo *philo);
+int			set_philo_died(t_philo *philo);
+int			check_philo_died(t_philo *philo);
+__u_int		get_time_since_last_meal(t_philo *philo, bool *err);
+int			safe_sem(sem_t *sem, int action, t_program *program);
+void		set_program_error(t_program *program);
+int			check_program_error(t_program *program);
+void		kill_all_except(t_philo **philos, __u_int n, pid_t exception);
+void		close_program_semaphores(t_program *program);
+bool		get_first_fork(t_philo *philo, t_program *program);
+bool		get_second_fork(t_philo *philo, t_program *program);
+char		*ft_itoa(int nbr);
+char		*ft_strjoin(char const *s1, char const *s2);
+void		ft_putendl_fd(char const *s, int fd);
 /* --------- */
 
 #endif /* MAIN_H */
