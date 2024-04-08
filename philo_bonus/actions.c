@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 14:12:38 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/07 00:37:33 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:41:53 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ bool	eat(t_philo *philo, t_program *program)
 		return (0);
 	if (check_philo_died(philo) == 1)
 		return (0);
-	safe_sem(program->print_lock, WAIT, program);
+	if (safe_sem(program->print_lock, WAIT, program) == -1)
+		return (0);
 	id = philo->id;
 	color = philo->color;
 	printf("%s%u %d is eating%s\n", color, get_time(), id, RESET);
@@ -42,7 +43,8 @@ bool	think(t_philo *philo, t_program *program)
 		return (0);
 	if (check_philo_died(philo) == 1)
 		return (0);
-	safe_sem(program->print_lock, WAIT, program);
+	if (safe_sem(program->print_lock, WAIT, program) == -1)
+		return (0);
 	id = philo->id;
 	color = philo->color;
 	printf("%s%u %d is thinking%s\n", color, get_time(), id, RESET);
@@ -61,7 +63,8 @@ bool	sleep_p(t_philo *philo, t_program *program)
 		return (0);
 	if (check_philo_died(philo) == 1)
 		return (0);
-	safe_sem(program->print_lock, WAIT, program);
+	if (safe_sem(program->print_lock, WAIT, program) == -1)
+		return (0);
 	id = philo->id;
 	color = philo->color;
 	printf("%s%u %d is sleeping%s\n", color, get_time(), id, RESET);

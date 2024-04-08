@@ -1,6 +1,6 @@
 NAME := philo_bonus
 CC := cc
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -pthread
 HEADER := main.h
 SRCS := actions.c check_safe.c init.c parsing.c processes.c set_safe.c utils.c utils_3.c \
 		actions_utils.c clear.c main.c philosophers.c safe.c threads.c utils_2.c
