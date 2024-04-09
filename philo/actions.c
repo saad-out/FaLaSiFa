@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:58:42 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/09 14:50:44 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/09 14:58:31 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,12 @@ bool	get_first_fork(t_philo *philo, t_program *program)
 	if (ret == -1)
 		return (false);
 	printf("%u %d has taken a fork\n", get_time(), philo->id);
+	if (philo->program->n_philos == 1)
+	{
+		while (check_program_philo_died(program) != 1)
+			usleep(program->t_die * 1000);
+		return (false);
+	}
 	return (true);
 }
 
