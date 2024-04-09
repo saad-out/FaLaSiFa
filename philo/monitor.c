@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 17:52:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/04 19:00:16 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/07 18:51:06 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ bool	philo_dead(t_program *program)
 			return (pthread_exit(NULL), false);
 		}
 		time = get_time();
-		if (program->philos[i]->last_meal < time - program->t_die)
+		if (program->philos[i]->last_meal <= time - program->t_die)
 		{
 			printf("%u %d died\n", time, program->philos[i]->id);
 			printf("philo %d died:\n\tlast meal: %u\n\ttime: %u\n", program->philos[i]->id, program->philos[i]->last_meal, time);

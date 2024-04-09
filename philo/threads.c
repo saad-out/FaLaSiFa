@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 22:51:36 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/05 18:59:00 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/09 14:36:00 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,18 @@ void	*philo_thread(void *arg)
 	meals = 0;
 	while (program->max_meals == -1 || meals < program->max_meals)
 	{
-		get_forks(philo, program);
-		eat(philo, program);
-		put_forks(philo, program);
-		sleep_p(philo, program);
-		think(philo, program);
-		meals++;
+		if (!get_forks(philo, program))
+			break ;
+		if (!eat(philo, program))
+			break ;
+		if (!put_forks(philo, program))
+			break ;
+		if (++meals == program->max_meals)
+			continue ;
+		if (!sleep_p(philo, program))
+			break ;
+		if (!think(philo, program))
+			break ;
 		// printf("%d finishied %u meals\n", philo->id, meals);
 	}
 	// printf("PHILO %d finished...\n", philo->id);

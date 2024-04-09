@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 21:55:38 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/04 18:41:17 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:32:28 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,6 @@ t_philo	**init_philos(t_program *program, t_fork **forks)
 		philos[i]->id = i + 1;
 		philos[i]->program = program;
 		philos[i]->finished = false;
-		// if (i + 1 != program->n_philos)
-		// {
-		// 	philos[i]->first_fork = forks[i + 1];
-		// 	philos[i]->second_fork = forks[i];
-		// }
-		// else
-		// {
-		// 	philos[i]->first_fork = forks[i];
-		// 	philos[i]->second_fork = forks[(i + 1) % program->n_philos];
-		// }
 		philos[i]->first_fork = forks[(i + 1) % program->n_philos];
 		philos[i]->second_fork = forks[i];
 		ret = pthread_mutex_init(&philos[i]->mutex, NULL);
