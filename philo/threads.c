@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 22:51:36 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/15 01:22:36 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 02:11:21 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,12 @@ void	start_threads(t_program *program)
 	{
 		ret = pthread_create(&philos[i]->thread, NULL, philo_thread, (void *)philos[i]);
 		if (ret != 0)
-			return (printf("error creating thread\n"), (void)0);
+			return (ft_putendl_fd(PTHREAD_CREATE_ERROR, STDERR_FILENO));
 		i++;
 	}
 	ret = pthread_create(&program->monitor, NULL, monitor_thread, (void *)program);
 	if (ret != 0)
-		return (printf("error creating thread\n"), (void)0);
+		return (ft_putendl_fd(PTHREAD_CREATE_ERROR, STDERR_FILENO));
 	if (set_program_ready(program) == -1)
 		return ;
 
@@ -98,11 +98,11 @@ void	start_threads(t_program *program)
 	{
 		ret = pthread_join(philos[i]->thread, NULL);
 		if (ret != 0)
-			return (printf("error creating thread\n"), (void)0);
+			return (ft_putendl_fd(PTHREAD_JOIN_ERROR, STDERR_FILENO));
 		i++;
 	}
 	/* join monitor thread */
 	ret = pthread_join(program->monitor, NULL);
 	if (ret != 0)
-		return (printf("error joining thread\n"), (void)0);
+		return (ft_putendl_fd(PTHREAD_JOIN_ERROR, STDERR_FILENO));
 }

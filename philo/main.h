@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/15 01:21:41 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 02:09:53 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,34 @@
 # ifndef UNLOCK
 #  define UNLOCK 1
 # endif /* UNLOCK */
+
+# ifndef MALLOC_ERROR
+#  define MALLOC_ERROR "malloc() error"
+# endif /* MALLOC_ERROR */
+
+# ifndef MUTEX_INIT_ERROR
+#  define MUTEX_INIT_ERROR "pthread_mutex_init() error"
+# endif /* MUTEX_INIT_ERROR */
+
+# ifndef MUTEX_DESTROY_ERROR
+#  define MUTEX_DESTROY_ERROR "pthread_mutex_destroy() error"
+# endif /* MUTEX_DESTROY_ERROR */
+
+# ifndef MUTEX_LOCK_ERROR
+#  define MUTEX_LOCK_ERROR "pthread_mutex_lock() error"
+# endif /* MUTEX_LOCK_ERROR */
+
+# ifndef MUTEX_UNLOCK_ERROR
+#  define MUTEX_UNLOCK_ERROR "pthread_mutex_unlock() error"
+# endif /* MUTEX_UNLOCK_ERROR */
+
+# ifndef PTHREAD_CREATE_ERROR
+#  define PTHREAD_CREATE_ERROR "pthread_create() error"
+# endif /* PTHREAD_CREATE_ERROR */
+
+# ifndef PTHREAD_JOIN_ERROR
+#  define PTHREAD_JOIN_ERROR "pthread_join() error"
+# endif /* PTHREAD_JOIN_ERROR */
 /* ----- */
 
 /* INCLUDES */
