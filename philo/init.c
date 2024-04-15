@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 21:55:38 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/08 15:32:28 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 02:02:45 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	clear_philos(t_philo **philos, __u_int i)
 	j = 0;
 	while (j < i)
 	{
-		pthread_mutex_destroy(&philos[j]->mutex);
+		if (pthread_mutex_destroy(&philos[j]->mutex) != 0)
+			ft_putendl_fd(MUTEX_DESTROY_ERROR, STDERR_FILENO);
 		free(philos[j++]);
 	}
 	free(philos);
@@ -36,7 +37,8 @@ void	clear_forks(t_fork	**forks, __u_int i)
 	j = 0;
 	while (j < i)
 	{
-		pthread_mutex_destroy(&forks[j]->mutex);
+		if (pthread_mutex_destroy(&forks[j]->mutex) != 0)
+			ft_putendl_fd(MUTEX_DESTROY_ERROR, STDERR_FILENO);
 		free(forks[j++]);
 	}
 	free(forks);
@@ -64,7 +66,10 @@ t_philo	**init_philos(t_program *program, t_fork **forks)
 		philos[i]->second_fork = forks[i];
 		ret = pthread_mutex_init(&philos[i]->mutex, NULL);
 		if (ret != 0)
+		{
+			ft_putendl_fd(MUTEX_INIT_ERROR, STDERR_FILENO);
 			return (clear_philos(philos, i), free(philos), NULL);
+		}
 		i++;
 	}
 	return (philos);
@@ -88,7 +93,10 @@ t_fork	**init_forks(__u_int n)
 		forks[i]->id = i;
 		ret = pthread_mutex_init(&forks[i]->mutex, NULL);
 		if (ret != 0)
+		{
+			ft_putendl_fd(MUTEX_INIT_ERROR, STDERR_FILENO);
 			return (clear_forks(forks, i), free(forks), NULL);
+		}
 		i++;
 	}
 	return (forks);
