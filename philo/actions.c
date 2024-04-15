@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:58:42 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/09 14:58:31 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 01:07:03 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,11 @@ bool	eat(t_philo *philo, t_program *program)
 	if (ret == -1)
 		return (false);
 	if (end)
-	{
-		printf("%d going to exit\n", philo->id);
 		return (false);
-	}
 	if (set_philo_last_meal(philo) == -1)
 		return (set_program_error(program), false);
+	if (check_program_philo_died(program) == 1)
+		return (false);
 	printf("%u %d is eating\n", get_time(), philo->id);
 	usleep(program->t_eat * 1000);
 	return (true);
@@ -53,10 +52,9 @@ bool	sleep_p(t_philo *philo, t_program *program)
 	if (ret == -1)
 		return (false);
 	if (end)
-	{
-		printf("%d going to exit\n", philo->id);
 		return (false);
-	}
+	if (check_program_philo_died(program) == 1)
+		return (false);
 	printf("%u %d is sleeping\n", get_time(), philo->id);
 	usleep(program->t_sleep * 1000);
 	return (true);
@@ -77,10 +75,9 @@ bool	think(t_philo *philo, t_program *program)
 	if (ret == -1)
 		return (false);
 	if (end)
-	{
-		printf("%d going to exit\n", philo->id);
 		return (false);
-	}
+	if (check_program_philo_died(program) == 1)
+		return (false);
 	printf("%u %d is thinking\n", get_time(), philo->id);
 	return (true);
 }
@@ -98,12 +95,11 @@ bool	get_first_fork(t_philo *philo, t_program *program)
 	if (ret == -1)
 		return (false);
 	if (end)
-	{
-		printf("%d going to exit\n", philo->id);
 		return (false);
-	}
 	ret = safe_mutex(&philo->first_fork->mutex, LOCK, program);
 	if (ret == -1)
+		return (false);
+	if (check_program_philo_died(program) == 1)
 		return (false);
 	printf("%u %d has taken a fork\n", get_time(), philo->id);
 	if (philo->program->n_philos == 1)
@@ -128,12 +124,11 @@ bool	get_second_fork(t_philo *philo, t_program *program)
 	if (ret == -1)
 		return (false);
 	if (end)
-	{
-		printf("%d going to exit\n", philo->id);
 		return (false);
-	}
 	ret = safe_mutex(&philo->second_fork->mutex, LOCK, program);
 	if (ret == -1)
+		return (false);
+	if (check_program_philo_died(program) == 1)
 		return (false);
 	printf("%u %d has taken a fork\n", get_time(), philo->id);
 	return (true);
@@ -159,9 +154,6 @@ bool	put_forks(t_philo *philo, t_program *program)
 	if (ret == -1)
 		return (false);
 	if (end)
-	{
-		printf("%d going to exit\n", philo->id);
 		return (false);
-	}
 	return (true);
 }

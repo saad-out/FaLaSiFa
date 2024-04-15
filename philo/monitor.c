@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 17:52:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/07 18:51:06 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/09 15:37:50 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,6 @@ bool	philo_dead(t_program *program)
 		time = get_time();
 		if (program->philos[i]->last_meal <= time - program->t_die)
 		{
-			printf("%u %d died\n", time, program->philos[i]->id);
-			printf("philo %d died:\n\tlast meal: %u\n\ttime: %u\n", program->philos[i]->id, program->philos[i]->last_meal, time);
-			printf("\tpassed: %u\n", time - program->philos[i]->last_meal);
-			died = true;
 			ret = set_program_philo_died(program);
 			if (ret == -1)
 			{
@@ -61,6 +57,12 @@ bool	philo_dead(t_program *program)
 				pthread_mutex_unlock(&program->mutex);
 				return (pthread_exit(NULL), false);
 			}
+			died = true;
+			safe_mutex(&program->print_mutex, LOCK, program);
+			printf("%u %d died\n", time, program->philos[i]->id);
+			printf("philo %d died:\n\tlast meal: %u\n\ttime: %u\n", program->philos[i]->id, program->philos[i]->last_meal, time);
+			printf("\tpassed: %u\n", time - program->philos[i]->last_meal);
+			safe_mutex(&program->print_mutex, UNLOCK, program);
 		}
 		ret = pthread_mutex_unlock(&program->philos[i]->mutex);
 		if (ret != 0)
