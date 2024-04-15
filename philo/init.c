@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 21:55:38 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/15 02:02:45 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 02:27:02 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ void	clear_philos(t_philo **philos, __u_int i)
 	j = 0;
 	while (j < i)
 	{
-		if (pthread_mutex_destroy(&philos[j]->mutex) != 0)
-			ft_putendl_fd(MUTEX_DESTROY_ERROR, STDERR_FILENO);
+		pthread_mutex_destroy(&philos[j]->mutex);
 		free(philos[j++]);
 	}
 	free(philos);
@@ -37,11 +36,21 @@ void	clear_forks(t_fork	**forks, __u_int i)
 	j = 0;
 	while (j < i)
 	{
-		if (pthread_mutex_destroy(&forks[j]->mutex) != 0)
-			ft_putendl_fd(MUTEX_DESTROY_ERROR, STDERR_FILENO);
+		pthread_mutex_destroy(&forks[j]->mutex);
 		free(forks[j++]);
 	}
 	free(forks);
+}
+
+static void	init_colors(char **colors)
+{
+	colors[0] = RED;
+	colors[1] = GRN;
+	colors[2] = YEL;
+	colors[3] = BLU;
+	colors[4] = MAG;
+	colors[5] = CYN;
+	colors[6] = WHT;
 }
 
 t_philo	**init_philos(t_program *program, t_fork **forks)
@@ -49,7 +58,9 @@ t_philo	**init_philos(t_program *program, t_fork **forks)
 	t_philo	**philos;
 	__u_int	i;
 	int		ret;
+	char	*colors[7];
 
+	init_colors(colors);
 	philos = malloc(sizeof(t_philo *) * program->n_philos);
 	if (!philos)
 		return (NULL);
@@ -60,6 +71,7 @@ t_philo	**init_philos(t_program *program, t_fork **forks)
 		if (!philos[i])
 			return (clear_philos(philos, i), free(philos), NULL);
 		philos[i]->id = i + 1;
+		philos[i]->color = colors[i % 7];
 		philos[i]->program = program;
 		philos[i]->finished = false;
 		philos[i]->first_fork = forks[(i + 1) % program->n_philos];

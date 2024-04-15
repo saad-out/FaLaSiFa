@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/15 02:09:53 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 02:23:34 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,38 @@
 # ifndef PTHREAD_JOIN_ERROR
 #  define PTHREAD_JOIN_ERROR "pthread_join() error"
 # endif /* PTHREAD_JOIN_ERROR */
+
+# ifndef RED
+#  define RED "\x1B[31m"
+# endif /* RED */
+
+# ifndef GRN
+#  define GRN "\x1B[32m"
+# endif /* GRN */
+
+# ifndef YEL
+#  define YEL "\x1B[33m"
+# endif /* YEL */
+
+# ifndef BLU
+#  define BLU "\x1B[34m"
+# endif /* BLU */
+
+# ifndef MAG
+#  define MAG "\x1B[35m"
+# endif /* MAG */
+
+# ifndef CYN
+#  define CYN "\x1B[36m"
+# endif /* CYN */
+
+# ifndef WHT
+#  define WHT "\x1B[37m"
+# endif /* WHT */
+
+# ifndef RESET
+#  define RESET "\x1B[0m"
+# endif /* RESET */
 /* ----- */
 
 /* INCLUDES */
@@ -72,6 +104,7 @@ struct s_philo
 {
 	int				id;
 	bool			finished;
+	char			*color;
 	__u_int			last_meal;
 	t_program		*program;
 	t_fork			*first_fork;
