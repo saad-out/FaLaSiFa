@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:58:42 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/15 01:22:56 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 02:39:00 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool	eat(t_philo *philo, t_program *program)
 		return (set_program_error(program), false);
 	if (check_program_philo_died(program) == 1)
 		return (false);
-	printf("%u %d is eating\n", get_time(), philo->id);
+	print_eating(philo);
 	ft_usleep(program->t_eat);
 	return (true);
 }
@@ -55,7 +55,7 @@ bool	sleep_p(t_philo *philo, t_program *program)
 		return (false);
 	if (check_program_philo_died(program) == 1)
 		return (false);
-	printf("%u %d is sleeping\n", get_time(), philo->id);
+	print_sleeping(philo);
 	ft_usleep(program->t_sleep);
 	return (true);
 }
@@ -78,7 +78,7 @@ bool	think(t_philo *philo, t_program *program)
 		return (false);
 	if (check_program_philo_died(program) == 1)
 		return (false);
-	printf("%u %d is thinking\n", get_time(), philo->id);
+	print_thinking(philo);
 	return (true);
 }
 
@@ -101,7 +101,7 @@ bool	get_first_fork(t_philo *philo, t_program *program)
 		return (false);
 	if (check_program_philo_died(program) == 1)
 		return (false);
-	printf("%u %d has taken a fork\n", get_time(), philo->id);
+	print_fork(philo);
 	if (philo->program->n_philos == 1)
 	{
 		while (check_program_philo_died(program) != 1)
@@ -130,7 +130,7 @@ bool	get_second_fork(t_philo *philo, t_program *program)
 		return (false);
 	if (check_program_philo_died(program) == 1)
 		return (false);
-	printf("%u %d has taken a fork\n", get_time(), philo->id);
+	print_fork(philo);
 	return (true);
 }
 

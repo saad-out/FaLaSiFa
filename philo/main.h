@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/15 02:23:34 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 02:34:38 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,13 @@ void		set_program_error(t_program *program);
 
 void		ft_putendl_fd(char const *s, int fd);
 
-int	ft_usleep(__u_int time);
+int			ft_usleep(__u_int time);
+
+void		print_eating(t_philo *philo);
+void		print_dead(t_philo *philo);
+void		print_fork(t_philo *philo);
+void		print_thinking(t_philo *philo);
+void		print_sleeping(t_philo *philo);
 /* --------- */
 
 #endif /* MAIN_H */

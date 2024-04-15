@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 17:52:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/15 01:22:42 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 02:38:49 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ bool	philo_dead(t_program *program)
 			}
 			died = true;
 			safe_mutex(&program->print_mutex, LOCK, program);
-			printf("%u %d died\n", time, program->philos[i]->id);
+			print_dead(program->philos[i]);
 			printf("philo %d died:\n\tlast meal: %u\n\ttime: %u\n", program->philos[i]->id, program->philos[i]->last_meal, time);
 			printf("\tpassed: %u\n", time - program->philos[i]->last_meal);
 			safe_mutex(&program->print_mutex, UNLOCK, program);
