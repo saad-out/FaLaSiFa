@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 17:52:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/04 19:00:16 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/15 02:41:41 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,8 @@ bool	philo_dead(t_program *program)
 			return (pthread_exit(NULL), false);
 		}
 		time = get_time();
-		if (program->philos[i]->last_meal < time - program->t_die)
+		if (program->philos[i]->last_meal <= time - program->t_die)
 		{
-			printf("%u %d died\n", time, program->philos[i]->id);
-			printf("philo %d died:\n\tlast meal: %u\n\ttime: %u\n", program->philos[i]->id, program->philos[i]->last_meal, time);
-			printf("\tpassed: %u\n", time - program->philos[i]->last_meal);
-			died = true;
 			ret = set_program_philo_died(program);
 			if (ret == -1)
 			{
@@ -61,6 +57,10 @@ bool	philo_dead(t_program *program)
 				pthread_mutex_unlock(&program->mutex);
 				return (pthread_exit(NULL), false);
 			}
+			died = true;
+			safe_mutex(&program->print_mutex, LOCK, program);
+			print_dead(program->philos[i]);
+			safe_mutex(&program->print_mutex, UNLOCK, program);
 		}
 		ret = pthread_mutex_unlock(&program->philos[i]->mutex);
 		if (ret != 0)
@@ -90,25 +90,19 @@ void	*monitor_thread(void *arg)
 		if (ret == -1)
 			return (NULL); // TODO: stop all threads
 	}
-	usleep(2 * 1000);
+	ft_usleep(2);
 	ret = 1;
 	while (ret)
 	{
 		if (philo_dead(program))
-		{
-			printf("END OF SIMULATION UNSUCCESSFULLY...PHILO DIED\n");
 			break ;
-		}
 		ret = check_program_finished(program);
 		if (ret == -1)
 			return (printf("mutex error\n"), NULL); // TODO: stop all threads
 		if (ret == program->n_philos)
-		{
-			printf("END OF SIMULATION SUCCESSFULLY...\n");
 			break ;
-		}
 		ret = 1;
-		usleep(8 * 1000);
+		ft_usleep(8);
 	}
 	return (NULL);
 }

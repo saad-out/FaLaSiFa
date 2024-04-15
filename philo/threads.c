@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 22:51:36 by soutchak          #+#    #+#             */
-/*   Updated: 2024/03/05 18:59:00 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/04/15 02:11:21 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,28 +39,25 @@ void	*philo_thread(void *arg)
 		pthread_mutex_unlock(&program->mutex);
 		return (NULL);
 	}
-	/* if only one philo, lock first fork and wait time to die */
-	if (program->n_philos == 1)
-	{
-		get_first_fork(philo, program);
-		usleep(program->t_die * 1000);
-		return (NULL);
-	}
 	/* lunch impair philos first */
 	if (philo->id % 2 == 0)
-		usleep(10 * 1000);
+		ft_usleep(10);
 	meals = 0;
 	while (program->max_meals == -1 || meals < program->max_meals)
 	{
-		get_forks(philo, program);
-		eat(philo, program);
-		put_forks(philo, program);
-		sleep_p(philo, program);
-		think(philo, program);
-		meals++;
-		// printf("%d finishied %u meals\n", philo->id, meals);
+		if (!get_forks(philo, program))
+			break ;
+		if (!eat(philo, program))
+			break ;
+		if (!put_forks(philo, program))
+			break ;
+		if (++meals == program->max_meals)
+			continue ;
+		if (!sleep_p(philo, program))
+			break ;
+		if (!think(philo, program))
+			break ;
 	}
-	// printf("PHILO %d finished...\n", philo->id);
 	if (set_program_finished(program) == -1 || set_philo_finished(philo) == -1)
 	{
 		pthread_mutex_lock(&program->mutex);
@@ -86,12 +83,12 @@ void	start_threads(t_program *program)
 	{
 		ret = pthread_create(&philos[i]->thread, NULL, philo_thread, (void *)philos[i]);
 		if (ret != 0)
-			return (printf("error creating thread\n"), (void)0);
+			return (ft_putendl_fd(PTHREAD_CREATE_ERROR, STDERR_FILENO));
 		i++;
 	}
 	ret = pthread_create(&program->monitor, NULL, monitor_thread, (void *)program);
 	if (ret != 0)
-		return (printf("error creating thread\n"), (void)0);
+		return (ft_putendl_fd(PTHREAD_CREATE_ERROR, STDERR_FILENO));
 	if (set_program_ready(program) == -1)
 		return ;
 
@@ -101,11 +98,11 @@ void	start_threads(t_program *program)
 	{
 		ret = pthread_join(philos[i]->thread, NULL);
 		if (ret != 0)
-			return (printf("error creating thread\n"), (void)0);
+			return (ft_putendl_fd(PTHREAD_JOIN_ERROR, STDERR_FILENO));
 		i++;
 	}
 	/* join monitor thread */
 	ret = pthread_join(program->monitor, NULL);
 	if (ret != 0)
-		return (printf("error joining thread\n"), (void)0);
+		return (ft_putendl_fd(PTHREAD_JOIN_ERROR, STDERR_FILENO));
 }
