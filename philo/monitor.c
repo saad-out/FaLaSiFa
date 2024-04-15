@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 17:52:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/09 15:37:50 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 01:22:42 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	*monitor_thread(void *arg)
 		if (ret == -1)
 			return (NULL); // TODO: stop all threads
 	}
-	usleep(2 * 1000);
+	ft_usleep(2);
 	ret = 1;
 	while (ret)
 	{
@@ -110,7 +110,7 @@ void	*monitor_thread(void *arg)
 			break ;
 		}
 		ret = 1;
-		usleep(8 * 1000);
+		ft_usleep(8);
 	}
 	return (NULL);
 }

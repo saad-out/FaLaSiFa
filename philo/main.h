@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/09 14:38:53 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 01:21:41 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ int			check_program_error(t_program *program);
 void		set_program_error(t_program *program);
 
 void		ft_putendl_fd(char const *s, int fd);
+
+int	ft_usleep(__u_int time);
 /* --------- */
 
 #endif /* MAIN_H */

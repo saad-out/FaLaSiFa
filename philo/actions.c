@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:58:42 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/15 01:07:03 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 01:22:56 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ bool	eat(t_philo *philo, t_program *program)
 	if (check_program_philo_died(program) == 1)
 		return (false);
 	printf("%u %d is eating\n", get_time(), philo->id);
-	usleep(program->t_eat * 1000);
+	ft_usleep(program->t_eat);
 	return (true);
 }
 
@@ -56,7 +56,7 @@ bool	sleep_p(t_philo *philo, t_program *program)
 	if (check_program_philo_died(program) == 1)
 		return (false);
 	printf("%u %d is sleeping\n", get_time(), philo->id);
-	usleep(program->t_sleep * 1000);
+	ft_usleep(program->t_sleep);
 	return (true);
 }
 
@@ -105,7 +105,7 @@ bool	get_first_fork(t_philo *philo, t_program *program)
 	if (philo->program->n_philos == 1)
 	{
 		while (check_program_philo_died(program) != 1)
-			usleep(program->t_die * 1000);
+			ft_usleep(program->t_die);
 		return (false);
 	}
 	return (true);

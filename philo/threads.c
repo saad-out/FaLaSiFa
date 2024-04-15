@@ -6,7 +6,7 @@
 /*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 22:51:36 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/09 14:56:43 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/15 01:22:36 by saad             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	*philo_thread(void *arg)
 	}
 	/* lunch impair philos first */
 	if (philo->id % 2 == 0)
-		usleep(10 * 1000);
+		ft_usleep(10);
 	meals = 0;
 	while (program->max_meals == -1 || meals < program->max_meals)
 	{
