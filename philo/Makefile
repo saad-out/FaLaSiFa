@@ -3,7 +3,8 @@ CC := cc
 # CFLAGS := -Wall -Wextra -Werror -pthread
 CFLAGS := -pthread
 HEADER := main.h
-SRCS := actions.c actions_utils.c init.c main.c monitor.c parsing.c safe.c threads.c utils_2.c utils.c
+SRCS := actions.c actions_utils.c init.c main.c monitor.c parsing.c safe.c threads.c utils_2.c utils.c \
+		philosophers.c clear.c
 OBJS := $(SRCS:.c=.o)
 
 all: $(NAME)

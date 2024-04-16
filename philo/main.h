@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/15 02:34:38 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/16 22:11:50 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,8 @@ void		print_dead(t_philo *philo);
 void		print_fork(t_philo *philo);
 void		print_thinking(t_philo *philo);
 void		print_sleeping(t_philo *philo);
+
+void		philosophers(int ac, char **av);
 /* --------- */
 
 #endif /* MAIN_H */

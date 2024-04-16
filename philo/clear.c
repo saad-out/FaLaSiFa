@@ -1,21 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   clear.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/27 17:37:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/16 22:11:21 by soutchak         ###   ########.fr       */
+/*   Created: 2024/04/16 22:25:40 by soutchak          #+#    #+#             */
+/*   Updated: 2024/04/16 22:26:14 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-int	main(int ac, char **av)
+void	clear_philos(t_philo **philos, __u_int i)
 {
-	if (ac < 5 || ac > 6)
-		return (ft_putendl_fd("wrong input", STDERR_FILENO), EXIT_FAILURE);
-	philosophers(ac - 1, av + 1);
-	return (0);
+	__u_int	j;
+
+	if (!philos)
+		return ;
+	j = 0;
+	while (j < i)
+	{
+		pthread_mutex_destroy(&philos[j]->mutex);
+		free(philos[j++]);
+	}
+	free(philos);
+}
+
+void	clear_forks(t_fork	**forks, __u_int i)
+{
+	__u_int	j;
+
+	if (!forks)
+		return ;
+	j = 0;
+	while (j < i)
+	{
+		pthread_mutex_destroy(&forks[j]->mutex);
+		free(forks[j++]);
+	}
+	free(forks);
 }
