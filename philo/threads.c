@@ -3,106 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 22:51:36 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/15 02:11:21 by saad             ###   ########.fr       */
+/*   Updated: 2024/04/16 22:42:22 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	*philo_thread(void *arg)
-{
-	t_philo		*philo;
-	t_program	*program;
-	long		meals;
-	int			ret;
-	bool		died;
-
-	if (!arg)
-		return (NULL);
-	philo = (t_philo *)arg;
-	program = philo->program;
-	ret = 0;
-	while (!ret)
-	{
-		ret = check_program_ready(program);
-		if (ret == -1)
-			return (NULL); // TODO: stop all threads
-	}
-	// philo->last_meal = get_time();
-	if (set_philo_last_meal(philo) == -1)
-	{
-		pthread_mutex_lock(&program->mutex);
-		program->err = true;
-		pthread_mutex_unlock(&program->mutex);
-		return (NULL);
-	}
-	/* lunch impair philos first */
-	if (philo->id % 2 == 0)
-		ft_usleep(10);
-	meals = 0;
-	while (program->max_meals == -1 || meals < program->max_meals)
-	{
-		if (!get_forks(philo, program))
-			break ;
-		if (!eat(philo, program))
-			break ;
-		if (!put_forks(philo, program))
-			break ;
-		if (++meals == program->max_meals)
-			continue ;
-		if (!sleep_p(philo, program))
-			break ;
-		if (!think(philo, program))
-			break ;
-	}
-	if (set_program_finished(program) == -1 || set_philo_finished(philo) == -1)
-	{
-		pthread_mutex_lock(&program->mutex);
-		program->err = true;
-		pthread_mutex_unlock(&program->mutex);
-		pthread_exit(NULL);
-	}
-	return (NULL);
-}
-
-void	start_threads(t_program *program)
+static int	create_threads(t_program *pg, t_philo **ps, t_fork **fs)
 {
 	__u_int	i;
-	t_philo	**philos;
-	t_fork	**forks;
 	int		ret;
 
-	philos = program->philos;
-	forks = program->forks;
-	/* create threads */
 	i = 0;
-	while (i < program->n_philos)
+	while (i < pg->n_philos)
 	{
-		ret = pthread_create(&philos[i]->thread, NULL, philo_thread, (void *)philos[i]);
+		ret = pthread_create(&ps[i]->thread, NULL, philo_thread, (void *)ps[i]);
 		if (ret != 0)
-			return (ft_putendl_fd(PTHREAD_CREATE_ERROR, STDERR_FILENO));
+			return (ft_putendl_fd(PTHREAD_CREATE_ERROR, STDERR_FILENO), 0);
 		i++;
 	}
-	ret = pthread_create(&program->monitor, NULL, monitor_thread, (void *)program);
+	ret = pthread_create(&pg->monitor, NULL, monitor_thread, (void *)pg);
 	if (ret != 0)
-		return (ft_putendl_fd(PTHREAD_CREATE_ERROR, STDERR_FILENO));
-	if (set_program_ready(program) == -1)
-		return ;
+		return (ft_putendl_fd(PTHREAD_CREATE_ERROR, STDERR_FILENO), 0);
+	return (1);
+}
 
-	/* join philo threads */
+static void	join_threads(t_program *pg, t_philo **ps, t_fork **fs)
+{
+	__u_int	i;
+	int		ret;
+
 	i = 0;
-	while (i < program->n_philos)
+	while (i < pg->n_philos)
 	{
-		ret = pthread_join(philos[i]->thread, NULL);
+		ret = pthread_join(ps[i]->thread, NULL);
 		if (ret != 0)
 			return (ft_putendl_fd(PTHREAD_JOIN_ERROR, STDERR_FILENO));
 		i++;
 	}
-	/* join monitor thread */
-	ret = pthread_join(program->monitor, NULL);
+	ret = pthread_join(pg->monitor, NULL);
 	if (ret != 0)
 		return (ft_putendl_fd(PTHREAD_JOIN_ERROR, STDERR_FILENO));
+}
+
+void	start_threads(t_program *program)
+{
+	t_philo	**philos;
+	t_fork	**forks;
+
+	philos = program->philos;
+	forks = program->forks;
+	if (!create_threads(program, philos, forks))
+		return ;
+	if (set_program_ready(program) == -1)
+		return ;
+	return (join_threads(program, philos, forks));
 }

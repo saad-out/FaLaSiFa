@@ -4,7 +4,7 @@ CC := cc
 CFLAGS := -pthread
 HEADER := main.h
 SRCS := actions.c actions_utils.c init.c main.c monitor.c parsing.c safe.c threads.c utils_2.c utils.c \
-		philosophers.c clear.c
+		philosophers.c clear.c philo.c
 OBJS := $(SRCS:.c=.o)
 
 all: $(NAME)
