@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   safe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 15:48:17 by saad              #+#    #+#             */
-/*   Updated: 2024/04/09 14:18:07 by saad             ###   ########.fr       */
+/*   Updated: 2024/05/06 16:53:56 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	set_program_error(t_program *program)
 	pthread_mutex_unlock(&program->mutex);
 }
 
+__attribute__((no_sanitize_thread))
 int	safe_mutex(pthread_mutex_t *mutex, int action, t_program *program)
 {
 	int	ret;

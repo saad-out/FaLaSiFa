@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 22:11:02 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/16 22:15:02 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/06 20:56:48 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,18 @@ static void	init_program(t_program *program, t_fork **fs, t_philo **ps)
 	program->ready = false;
 	program->philo_died = false;
 	program->err = false;
+	if (pthread_mutex_init(&program->mutex, NULL) != 0)
+	{
+		ft_putendl_fd(MUTEX_INIT_ERROR, STDERR_FILENO);
+		free(program);
+		return ;
+	}
+	if (pthread_mutex_init(&program->print_mutex, NULL) != 0)
+	{
+		ft_putendl_fd(MUTEX_INIT_ERROR, STDERR_FILENO);
+		free(program);
+		return ;
+	}
 }
 
 void	philosophers(int ac, char **av)
