@@ -1,11 +1,9 @@
 NAME := philo
 CC := cc
-CFLAGS := -Wall -Wextra -fsanitize=thread
-# CFLAGS := -Wall -Wextra
-# CFLAGS := -pthread
+CFLAGS := -Wall -Wextra -Werror -fsanitize=thread
 HEADER := main.h
-SRCS := actions.c actions_utils.c init.c main.c monitor.c parsing.c safe.c threads.c utils_2.c utils.c \
-		philosophers.c clear.c philo.c actions2.c utils_3.c utils_4.c utils_5.c
+SRCS := actions.c actions_utils.c init.c main.c monitor.c parsing.c safe.c threads.c utils.c \
+		philosophers.c clear.c philo.c actions2.c set_safe.c check_safe.c libs.c libs_2.c
 OBJS := $(SRCS:.c=.o)
 
 all: $(NAME)
