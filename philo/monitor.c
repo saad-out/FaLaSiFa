@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 17:52:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/09 16:41:34 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 22:49:08 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	died_since_last_meal(t_program *program, __u_int i)
 	if (safe_mutex(&program->philos[i]->mutex, LOCK, program) == -1)
 		return (-1);
 	time = get_time();
-	if (program->philos[i]->last_meal <= time - program->t_die)
+	if (program->t_die <= time - program->philos[i]->last_meal)
 	{
 		if (set_program_philo_died(program) == -1)
 			return (-1);

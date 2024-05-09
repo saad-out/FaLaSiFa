@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/09 16:30:55 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 22:23:44 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ bool		get_second_fork(t_philo *philo, t_program *program);
 int			safe_mutex(pthread_mutex_t *mutex, int action, t_program *program);
 int			check_program_error(t_program *program);
 void		set_program_error(t_program *program);
+__u_int		start_time(bool init);
 
 void		ft_putendl_fd(char const *s, int fd);
 size_t		ft_strlen(const char *s);

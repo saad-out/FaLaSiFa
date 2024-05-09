@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 22:51:36 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/09 16:42:44 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 22:51:06 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	start_threads(t_program *program)
 	philos = program->philos;
 	if (!create_threads(program, philos))
 		return ;
+	start_time(true);
 	if (set_program_ready(program) == -1)
 		return ;
 	return (join_threads(program, philos));
