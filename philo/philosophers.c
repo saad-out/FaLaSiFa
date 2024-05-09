@@ -6,13 +6,13 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 22:11:02 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/08 19:01:48 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:26:09 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-static void	init_program(t_program *program, t_fork **fs, t_philo **ps)
+static bool	init_program(t_program *program, t_fork **fs, t_philo **ps)
 {
 	program->forks = fs;
 	program->philos = ps;
@@ -24,14 +24,15 @@ static void	init_program(t_program *program, t_fork **fs, t_philo **ps)
 	{
 		ft_putendl_fd(MUTEX_INIT_ERROR, STDERR_FILENO);
 		free(program);
-		return ;
+		return (false);
 	}
 	if (pthread_mutex_init(&program->print_mutex, NULL) != 0)
 	{
 		ft_putendl_fd(MUTEX_INIT_ERROR, STDERR_FILENO);
 		free(program);
-		return ;
+		return (false);
 	}
+	return (true);
 }
 
 void	philosophers(int ac, char **av)
@@ -42,23 +43,23 @@ void	philosophers(int ac, char **av)
 
 	program = parse_input(ac, av);
 	if (!program)
-		return (ft_putendl_fd("wrong input", 2), exit(EXIT_FAILURE));
+		return (ft_putendl_fd("wrong input", 2));
 	forks = init_forks(program->n_philos);
 	if (!forks)
 	{
 		ft_putendl_fd("error creating forks", STDERR_FILENO);
-		return (free(program), exit(EXIT_FAILURE));
+		return (free(program));
 	}
 	philos = init_philos(program, forks);
 	if (!philos)
 	{
 		ft_putendl_fd("error creating philos", STDERR_FILENO);
 		clear_forks(forks, program->n_philos);
-		return (free(program), exit(EXIT_FAILURE));
+		return (free(program));
 	}
-	init_program(program, forks, philos);
+	if (!init_program(program, forks, philos))
+		return ;
 	start_threads(program);
 	clear_forks(forks, program->n_philos);
-	clear_philos(philos, program->n_philos);
-	free(program);
+	return (clear_philos(philos, program->n_philos), free(program));
 }

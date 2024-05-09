@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 21:54:29 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 10:26:43 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:22:15 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_program	*parse_input(int ac, char **av)
 	(void)ac;
 	program = (t_program *)malloc(sizeof(t_program));
 	if (!program)
-		return (printf("malloc error\n"), exit(EXIT_FAILURE), NULL);
+		return (ft_putendl_fd("malloc error\n", STDERR_FILENO), NULL);
 	err = 0;
 	program->n_philos = ft_atoerr(av[0], &err);
 	if (err)

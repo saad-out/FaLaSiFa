@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 15:48:17 by saad              #+#    #+#             */
-/*   Updated: 2024/05/08 18:31:19 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:39:22 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	safe_mutex(pthread_mutex_t *mutex, int action, t_program *program)
 	{
 		ft_putendl_fd("safe_mutex() error", STDERR_FILENO);
 		set_program_error(program);
-		return (pthread_exit(NULL), -1);
+		return (-1);
 	}
 	return (0);
 }

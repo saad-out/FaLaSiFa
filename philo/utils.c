@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 19:04:18 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/09 15:25:34 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:13:47 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,31 @@
 
 int	set_program_ready(t_program *program)
 {
-	safe_mutex(&program->mutex, LOCK, program);
+	if (safe_mutex(&program->mutex, LOCK, program) == -1)
+		return (-1);
 	program->ready = true;
-	safe_mutex(&program->mutex, UNLOCK, program);
+	if (safe_mutex(&program->mutex, UNLOCK, program) == -1)
+		return (-1);
 	return (0);
 }
 
 int	set_philo_last_meal(t_philo *philo)
 {
-	safe_mutex(&philo->mutex, LOCK, philo->program);
+	if (safe_mutex(&philo->mutex, LOCK, philo->program) == -1)
+		return (-1);
 	philo->last_meal = get_time();
-	safe_mutex(&philo->mutex, UNLOCK, philo->program);
+	if (safe_mutex(&philo->mutex, UNLOCK, philo->program) == -1)
+		return (-1);
 	return (0);
 }
 
 int	set_philo_finished(t_philo *philo)
 {
-	safe_mutex(&philo->mutex, LOCK, philo->program);
+	if (safe_mutex(&philo->mutex, LOCK, philo->program) == -1)
+		return (-1);
 	philo->finished = true;
-	safe_mutex(&philo->mutex, UNLOCK, philo->program);
+	if (safe_mutex(&philo->mutex, UNLOCK, philo->program) == -1)
+		return (-1);
 	return (0);
 }
 
@@ -40,9 +46,11 @@ int	check_philo_finished(t_philo *philo)
 {
 	bool	finished;
 
-	safe_mutex(&philo->mutex, LOCK, philo->program);
+	if (safe_mutex(&philo->mutex, LOCK, philo->program) == -1)
+		return (-1);
 	finished = philo->finished;
-	safe_mutex(&philo->mutex, UNLOCK, philo->program);
+	if (safe_mutex(&philo->mutex, UNLOCK, philo->program) == -1)
+		return (-1);
 	return ((int)finished);
 }
 
@@ -50,8 +58,10 @@ int	check_program_ready(t_program *program)
 {
 	bool	ready;
 
-	safe_mutex(&program->mutex, LOCK, program);
+	if (safe_mutex(&program->mutex, LOCK, program) == -1)
+		return (-1);
 	ready = program->ready;
-	safe_mutex(&program->mutex, UNLOCK, program);
+	if (safe_mutex(&program->mutex, UNLOCK, program) == -1)
+		return (-1);
 	return ((int)ready);
 }

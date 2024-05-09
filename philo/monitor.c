@@ -6,35 +6,54 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 17:52:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/08 18:54:33 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:41:34 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-bool	philo_dead(t_program *program)
+int	died_since_last_meal(t_program *program, __u_int i)
 {
-	int		i;
-	bool	died;
 	__u_int	time;
+	bool	died;
+
+	died = false;
+	if (safe_mutex(&program->philos[i]->mutex, LOCK, program) == -1)
+		return (-1);
+	time = get_time();
+	if (program->philos[i]->last_meal <= time - program->t_die)
+	{
+		if (set_program_philo_died(program) == -1)
+			return (-1);
+		died = true;
+		if (safe_mutex(&program->print_mutex, LOCK, program) == -1)
+			return (-1);
+		print_dead(program->philos[i]);
+		if (safe_mutex(&program->print_mutex, UNLOCK, program) == -1)
+			return (-1);
+	}
+	if (safe_mutex(&program->philos[i]->mutex, UNLOCK, program) == -1)
+		return (-1);
+	return ((int)died);
+}
+
+int	philo_dead(t_program *program)
+{
+	__u_int	i;
+	bool	died;
+	int		ret;
 
 	i = 0;
 	died = false;
 	while (i < program->n_philos && !died)
 	{
-		if (check_philo_finished(program->philos[i]) == 0)
+		ret = check_philo_finished(program->philos[i]);
+		if (ret == -1)
+			return (-1);
+		if (ret == 0)
 		{
-			safe_mutex(&program->philos[i]->mutex, LOCK, program);
-			time = get_time();
-			if (program->philos[i]->last_meal <= time - program->t_die)
-			{
-				set_program_philo_died(program);
+			if (died_since_last_meal(program, i) != 0)
 				died = true;
-				safe_mutex(&program->print_mutex, LOCK, program);
-				print_dead(program->philos[i]);
-				safe_mutex(&program->print_mutex, UNLOCK, program);
-			}
-			safe_mutex(&program->philos[i]->mutex, UNLOCK, program);
 		}
 		i++;
 	}
@@ -44,20 +63,21 @@ bool	philo_dead(t_program *program)
 void	*monitor_thread(void *arg)
 {
 	t_program	*program;
+	int			ret;
 
 	if (!arg)
 		return (NULL);
 	program = (t_program *)arg;
-	while (check_program_ready(program) == 0)
-	{
-	}
+	if (!wait_threads(program))
+		return (NULL);
 	ft_usleep(2);
 	while (true)
 	{
-		if (philo_dead(program))
+		if (philo_dead(program) != 0)
 			break ;
-		if (check_program_finished(program) == program->n_philos)
-			break ;
+		ret = check_program_finished(program);
+		if (ret == -1 || ret == (int)program->n_philos)
+			return (NULL);
 		ft_usleep(5);
 	}
 	return (NULL);

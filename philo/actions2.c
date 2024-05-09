@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 00:29:34 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/08 18:52:04 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 15:43:45 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,16 @@ bool	get_first_fork(t_philo *philo, t_program *program)
 {
 	bool	end;
 
-	safe_mutex(&philo->program->mutex, LOCK, program);
+	if (safe_mutex(&philo->program->mutex, LOCK, program) == -1)
+		return (false);
 	end = program->err || program->philo_died;
-	safe_mutex(&philo->program->mutex, UNLOCK, program);
+	if (safe_mutex(&philo->program->mutex, UNLOCK, program) == -1)
+		return (false);
 	if (end)
 		return (false);
-	safe_mutex(&philo->first_fork->mutex, LOCK, program);
-	if (check_program_philo_died(program) == 1)
+	if (safe_mutex(&philo->first_fork->mutex, LOCK, program) == -1)
+		return (false);
+	if (check_program_philo_died(program) != 0)
 		return (false);
 	print_fork(philo);
 	if (program->n_philos == 1)
@@ -34,13 +37,16 @@ bool	get_second_fork(t_philo *philo, t_program *program)
 {
 	bool	end;
 
-	safe_mutex(&philo->program->mutex, LOCK, program);
+	if (safe_mutex(&philo->program->mutex, LOCK, program) == -1)
+		return (false);
 	end = program->err || program->philo_died;
-	safe_mutex(&philo->program->mutex, UNLOCK, program);
+	if (safe_mutex(&philo->program->mutex, UNLOCK, program) == -1)
+		return (false);
 	if (end)
 		return (false);
-	safe_mutex(&philo->second_fork->mutex, LOCK, program);
-	if (check_program_philo_died(program) == 1)
+	if (safe_mutex(&philo->second_fork->mutex, LOCK, program) == -1)
+		return (false);
+	if (check_program_philo_died(program) != 0)
 		return (false);
 	print_fork(philo);
 	if (program->n_philos == 1)

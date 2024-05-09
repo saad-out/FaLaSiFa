@@ -6,13 +6,13 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 22:40:41 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/05 19:59:42 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:43:03 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-static void	simulation(t_program *program, t_philo *philo)
+static bool	simulation(t_program *program, t_philo *philo)
 {
 	long		meals;
 
@@ -22,21 +22,22 @@ static void	simulation(t_program *program, t_philo *philo)
 	while (program->max_meals == -1 || meals < program->max_meals)
 	{
 		if (!get_forks(philo, program))
-			break ;
+			return (false);
 		if (!eat(philo, program))
-			break ;
+			return (false);
 		if (!put_forks(philo, program))
-			break ;
+			return (false);
 		if (++meals == program->max_meals)
 			continue ;
 		if (!sleep_p(philo, program))
-			break ;
+			return (false);
 		if (!think(philo, program))
-			break ;
+			return (false);
 	}
+	return (true);
 }
 
-static int	wait_threads(t_program *program)
+bool	wait_threads(t_program *program)
 {
 	int			ret;
 
@@ -45,16 +46,15 @@ static int	wait_threads(t_program *program)
 	{
 		ret = check_program_ready(program);
 		if (ret == -1)
-			return (0);
+			return (false);
 	}
-	return (1);
+	return (true);
 }
 
 void	*philo_thread(void *arg)
 {
 	t_philo		*philo;
 	t_program	*program;
-	bool		died;
 
 	if (!arg)
 		return (NULL);
@@ -63,18 +63,10 @@ void	*philo_thread(void *arg)
 	if (!wait_threads(program))
 		return (NULL);
 	if (set_philo_last_meal(philo) == -1)
-	{
-		pthread_mutex_lock(&program->mutex);
-		program->err = true;
-		return (pthread_mutex_unlock(&program->mutex), NULL);
-	}
-	simulation(program, philo);
+		return (NULL);
+	if (!simulation(program, philo))
+		return (NULL);
 	if (set_program_finished(program) == -1 || set_philo_finished(philo) == -1)
-	{
-		pthread_mutex_lock(&program->mutex);
-		program->err = true;
-		pthread_mutex_unlock(&program->mutex);
-		pthread_exit(NULL);
-	}
+		return (NULL);
 	return (NULL);
 }

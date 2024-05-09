@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/09 15:32:42 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:30:55 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ int			set_program_finished(t_program *program);
 long		check_program_finished(t_program *program);
 int			set_program_philo_died(t_program *program);
 int			check_program_philo_died(t_program *program);
+bool		wait_threads(t_program *program);
 
 bool		think(t_philo *philo, t_program *program);
 bool		sleep_p(t_philo *philo, t_program *program);

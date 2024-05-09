@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 15:58:42 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/08 19:04:54 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 15:39:44 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,16 @@ bool	eat(t_philo *philo, t_program *program)
 
 	if (!philo)
 		return (false);
-	safe_mutex(&program->mutex, LOCK, program);
+	if (safe_mutex(&program->mutex, LOCK, program) == -1)
+		return (false);
 	end = program->err || program->philo_died;
-	safe_mutex(&program->mutex, UNLOCK, program);
+	if (safe_mutex(&program->mutex, UNLOCK, program) == -1)
+		return (false);
 	if (end)
 		return (false);
-	set_philo_last_meal(philo);
-	if (check_program_philo_died(program) == 1)
+	if (set_philo_last_meal(philo) == -1)
+		return (false);
+	if (check_program_philo_died(program) != 0)
 		return (false);
 	print_eating(philo);
 	ft_usleep(program->t_eat);
@@ -37,12 +40,14 @@ bool	sleep_p(t_philo *philo, t_program *program)
 
 	if (!philo)
 		return (false);
-	safe_mutex(&program->mutex, LOCK, program);
+	if (safe_mutex(&program->mutex, LOCK, program) == -1)
+		return (false);
 	end = program->err || program->philo_died;
-	safe_mutex(&program->mutex, UNLOCK, program);
+	if (safe_mutex(&program->mutex, UNLOCK, program) == -1)
+		return (false);
 	if (end)
 		return (false);
-	if (check_program_philo_died(program) == 1)
+	if (check_program_philo_died(program) != 0)
 		return (false);
 	print_sleeping(philo);
 	ft_usleep(program->t_sleep);
@@ -55,12 +60,14 @@ bool	think(t_philo *philo, t_program *program)
 
 	if (!philo)
 		return (false);
-	safe_mutex(&program->mutex, LOCK, program);
+	if (safe_mutex(&program->mutex, LOCK, program) == -1)
+		return (false);
 	end = program->err || program->philo_died;
-	safe_mutex(&program->mutex, UNLOCK, program);
+	if (safe_mutex(&program->mutex, UNLOCK, program) == -1)
+		return (false);
 	if (end)
 		return (false);
-	if (check_program_philo_died(program) == 1)
+	if (check_program_philo_died(program) != 0)
 		return (false);
 	print_thinking(philo);
 	ft_usleep(1);
@@ -81,11 +88,15 @@ bool	put_forks(t_philo *philo, t_program *program)
 {
 	int	end;
 
-	safe_mutex(&philo->first_fork->mutex, UNLOCK, program);
-	safe_mutex(&philo->second_fork->mutex, UNLOCK, program);
-	safe_mutex(&program->mutex, LOCK, program);
+	if (safe_mutex(&philo->first_fork->mutex, UNLOCK, program) == -1)
+		return (false);
+	if (safe_mutex(&philo->second_fork->mutex, UNLOCK, program) == -1)
+		return (false);
+	if (safe_mutex(&program->mutex, LOCK, program) == -1)
+		return (false);
 	end = program->err || program->philo_died;
-	safe_mutex(&program->mutex, UNLOCK, program);
+	if (safe_mutex(&program->mutex, UNLOCK, program) == -1)
+		return (false);
 	if (end)
 		return (false);
 	return (true);
