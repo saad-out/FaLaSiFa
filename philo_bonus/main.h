@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/07 03:34:07 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 22:54:34 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,7 @@ bool		get_second_fork(t_philo *philo, t_program *program);
 char		*ft_itoa(int nbr);
 char		*ft_strjoin(char const *s1, char const *s2);
 void		ft_putendl_fd(char const *s, int fd);
+__u_int		start_time(bool init);
 /* --------- */
 
 #endif /* MAIN_H */

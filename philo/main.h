@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/16 22:11:50 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 22:23:44 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,13 +148,13 @@ void		clear_philos(t_philo **philos, __u_int i);
 int			check_program_ready(t_program *program);
 int			set_program_ready(t_program *program);
 void		*philo_thread(void *arg);
-// void		start_threads(t_program *, t_philo **, t_fork **);
-void		start_threads(t_program *);
+void		start_threads(t_program *p);
 __u_int		get_time(void);
 int			set_program_finished(t_program *program);
 long		check_program_finished(t_program *program);
 int			set_program_philo_died(t_program *program);
 int			check_program_philo_died(t_program *program);
+bool		wait_threads(t_program *program);
 
 bool		think(t_philo *philo, t_program *program);
 bool		sleep_p(t_philo *philo, t_program *program);
@@ -172,9 +172,10 @@ bool		get_second_fork(t_philo *philo, t_program *program);
 int			safe_mutex(pthread_mutex_t *mutex, int action, t_program *program);
 int			check_program_error(t_program *program);
 void		set_program_error(t_program *program);
+__u_int		start_time(bool init);
 
 void		ft_putendl_fd(char const *s, int fd);
-
+size_t		ft_strlen(const char *s);
 int			ft_usleep(__u_int time);
 
 void		print_eating(t_philo *philo);

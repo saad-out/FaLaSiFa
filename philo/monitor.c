@@ -3,23 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 17:52:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/15 02:41:41 by saad             ###   ########.fr       */
+/*   Updated: 2024/05/09 22:49:08 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-//TODO: monitor should check if philo died not philo reporting it died
-
-bool	philo_dead(t_program *program)
+int	died_since_last_meal(t_program *program, __u_int i)
 {
-	int		i;
-	int		ret;
-	bool	died;
 	__u_int	time;
+	bool	died;
+
+	died = false;
+	if (safe_mutex(&program->philos[i]->mutex, LOCK, program) == -1)
+		return (-1);
+	time = get_time();
+	if (program->t_die <= time - program->philos[i]->last_meal)
+	{
+		if (set_program_philo_died(program) == -1)
+			return (-1);
+		died = true;
+		if (safe_mutex(&program->print_mutex, LOCK, program) == -1)
+			return (-1);
+		print_dead(program->philos[i]);
+		if (safe_mutex(&program->print_mutex, UNLOCK, program) == -1)
+			return (-1);
+	}
+	if (safe_mutex(&program->philos[i]->mutex, UNLOCK, program) == -1)
+		return (-1);
+	return ((int)died);
+}
+
+int	philo_dead(t_program *program)
+{
+	__u_int	i;
+	bool	died;
+	int		ret;
 
 	i = 0;
 	died = false;
@@ -27,48 +49,11 @@ bool	philo_dead(t_program *program)
 	{
 		ret = check_philo_finished(program->philos[i]);
 		if (ret == -1)
+			return (-1);
+		if (ret == 0)
 		{
-			pthread_mutex_lock(&program->mutex);
-			program->err = true;
-			pthread_mutex_unlock(&program->mutex);
-			return (pthread_exit(NULL), false);
-		}
-		if (ret)
-		{
-			i++;
-			continue ;
-		}
-		ret = pthread_mutex_lock(&program->philos[i]->mutex);
-		if (ret != 0)
-		{
-			pthread_mutex_lock(&program->mutex);
-			program->err = true;
-			pthread_mutex_unlock(&program->mutex);
-			return (pthread_exit(NULL), false);
-		}
-		time = get_time();
-		if (program->philos[i]->last_meal <= time - program->t_die)
-		{
-			ret = set_program_philo_died(program);
-			if (ret == -1)
-			{
-				pthread_mutex_lock(&program->mutex);
-				program->err = true;
-				pthread_mutex_unlock(&program->mutex);
-				return (pthread_exit(NULL), false);
-			}
-			died = true;
-			safe_mutex(&program->print_mutex, LOCK, program);
-			print_dead(program->philos[i]);
-			safe_mutex(&program->print_mutex, UNLOCK, program);
-		}
-		ret = pthread_mutex_unlock(&program->philos[i]->mutex);
-		if (ret != 0)
-		{
-			pthread_mutex_lock(&program->mutex);
-			program->err = true;
-			pthread_mutex_unlock(&program->mutex);
-			return (pthread_exit(NULL), false);
+			if (died_since_last_meal(program, i) != 0)
+				died = true;
 		}
 		i++;
 	}
@@ -83,26 +68,17 @@ void	*monitor_thread(void *arg)
 	if (!arg)
 		return (NULL);
 	program = (t_program *)arg;
-	ret = 0;
-	while (!ret)
-	{
-		ret = check_program_ready(program);
-		if (ret == -1)
-			return (NULL); // TODO: stop all threads
-	}
+	if (!wait_threads(program))
+		return (NULL);
 	ft_usleep(2);
-	ret = 1;
-	while (ret)
+	while (true)
 	{
-		if (philo_dead(program))
+		if (philo_dead(program) != 0)
 			break ;
 		ret = check_program_finished(program);
-		if (ret == -1)
-			return (printf("mutex error\n"), NULL); // TODO: stop all threads
-		if (ret == program->n_philos)
-			break ;
-		ret = 1;
-		ft_usleep(8);
+		if (ret == -1 || ret == (int)program->n_philos)
+			return (NULL);
+		ft_usleep(5);
 	}
 	return (NULL);
 }
