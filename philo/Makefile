@@ -5,7 +5,7 @@ CFLAGS := -Wall -Wextra -fsanitize=thread
 # CFLAGS := -pthread
 HEADER := main.h
 SRCS := actions.c actions_utils.c init.c main.c monitor.c parsing.c safe.c threads.c utils_2.c utils.c \
-		philosophers.c clear.c philo.c actions2.c
+		philosophers.c clear.c philo.c actions2.c utils_3.c utils_4.c utils_5.c
 OBJS := $(SRCS:.c=.o)
 
 all: $(NAME)
