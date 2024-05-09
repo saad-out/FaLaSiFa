@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 22:30:37 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/07 01:54:58 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 22:55:12 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ static bool	spawn_processes(t_program *program, t_philo **philos)
 	__u_int	i;
 	pid_t	pid;
 
+	start_time(true);
 	i = 0;
 	while (i < program->n_philos)
 	{

@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 20:57:45 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/07 00:44:12 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/09 22:54:18 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,21 @@ int	ft_usleep(__u_int time)
 	return (0);
 }
 
+__u_int	start_time(bool init)
+{
+	static __u_int	start = 0;
+
+	if (init)
+		start = get_time();
+	return (start);
+}
+
 __u_int	get_time(void)
 {
 	struct timeval	time;
+	__u_int			start;
 
-	if (gettimeofday(&time, NULL) == -1)
-	{
-		ft_putendl_fd("gettimeofday() error", STDERR_FILENO);
-		exit(EXIT_FAILURE);
-	}
-	return ((__u_int)(time.tv_sec * 1000 + time.tv_usec / 1000));
+	start = start_time(false);
+	gettimeofday(&time, NULL);
+	return ((__u_int)(time.tv_sec * 1000 + time.tv_usec / 1000) - start);
 }
