@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 03:55:05 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 10:59:56 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/10 16:20:30 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ static void	open_semaphores(t_program *program)
 {
 	sem_t	*sem;
 
-	sem = sem_open(PROGRAM_SEM_NAME, O_CREAT | O_EXCL, 0777, 1);
+	sem = sem_open(PROGRAM_SEM_NAME, O_CREAT | O_EXCL, O_RDWR, 1);
 	if (sem == SEM_FAILED)
 	{
 		ft_putendl_fd(SEM_OPEN_ERROR, STDERR_FILENO);
 		return (free(program), exit(EXIT_FAILURE));
 	}
 	program->var_lock = sem;
-	sem = sem_open(FORKS, O_CREAT | O_EXCL, 0777, program->n_philos);
+	sem = sem_open(FORKS, O_CREAT | O_EXCL, O_RDWR, program->n_philos);
 	if (sem == SEM_FAILED)
 	{
 		ft_putendl_fd(SEM_OPEN_ERROR, STDERR_FILENO);
@@ -41,7 +41,7 @@ static void	open_semaphores(t_program *program)
 		return (free(program), exit(EXIT_FAILURE));
 	}
 	program->forks = sem;
-	sem = sem_open(PRINT_LOCK, O_CREAT | O_EXCL, 0777, 1);
+	sem = sem_open(PRINT_LOCK, O_CREAT | O_EXCL, O_RDWR, 1);
 	if (sem == SEM_FAILED)
 	{
 		ft_putendl_fd(SEM_OPEN_ERROR, STDERR_FILENO);

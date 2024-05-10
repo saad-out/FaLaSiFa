@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 16:02:01 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/06 10:55:42 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/10 16:19:57 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static t_philo	*init_philo(t_philo *philo, __u_int i, t_program *program)
 	if (!philo->name)
 		return (free(philo), NULL);
 	sem_unlink(philo->name);
-	philo->sem = sem_open(philo->name, O_CREAT | O_EXCL, 0777, 1);
+	philo->sem = sem_open(philo->name, O_CREAT | O_EXCL, O_RDWR, 1);
 	if (philo->sem == SEM_FAILED)
 	{
 		ft_putendl_fd(SEM_OPEN_ERROR, STDERR_FILENO);
