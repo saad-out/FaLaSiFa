@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 17:37:58 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/09 22:54:34 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/10 15:40:36 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,19 @@
 
 /* MARCOS */
 # ifndef PROGRAM_SEM_NAME
-#  define PROGRAM_SEM_NAME "program"
+#  define PROGRAM_SEM_NAME "/program"
 # endif /* PROGRAM_SEM_NAME */
 
 # ifndef FORKS
-#  define FORKS "forks"
+#  define FORKS "/forks"
 # endif /* FORKS */
 
 # ifndef PRINT_LOCK
-#  define PRINT_LOCK "printf"
+#  define PRINT_LOCK "/printf"
 # endif /* PRINT_LOCK */
 
 # ifndef PHILO_SEM_NAME
-#  define PHILO_SEM_NAME "philos"
+#  define PHILO_SEM_NAME "/philos"
 # endif /* PHILO_SEM_NAME */
 
 # ifndef POST
