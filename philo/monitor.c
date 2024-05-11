@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 17:52:09 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/09 22:49:08 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:03:46 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	*monitor_thread(void *arg)
 	program = (t_program *)arg;
 	if (!wait_threads(program))
 		return (NULL);
-	ft_usleep(2);
+	ft_usleep(1);
 	while (true)
 	{
 		if (philo_dead(program) != 0)
@@ -78,7 +78,6 @@ void	*monitor_thread(void *arg)
 		ret = check_program_finished(program);
 		if (ret == -1 || ret == (int)program->n_philos)
 			return (NULL);
-		ft_usleep(5);
 	}
 	return (NULL);
 }
