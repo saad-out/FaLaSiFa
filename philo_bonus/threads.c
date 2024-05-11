@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 21:19:01 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/11 15:06:13 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/11 17:21:08 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	*philo_thread(void *arg)
 	if (set_philo_last_meal(philo) == -1)
 		return (NULL);
 	if (philo->id % 2 == 0)
-		ft_usleep(50);
+		ft_usleep(10);
 	simulation(philo, program);
 	if (check_philo_died(philo) != 1)
 		set_philo_finished(philo);
