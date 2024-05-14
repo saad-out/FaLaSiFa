@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 00:29:34 by soutchak          #+#    #+#             */
-/*   Updated: 2024/05/09 15:43:45 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/11 17:07:48 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,12 @@ bool	get_first_fork(t_philo *philo, t_program *program)
 	if (safe_mutex(&philo->first_fork->mutex, LOCK, program) == -1)
 		return (false);
 	if (check_program_philo_died(program) != 0)
+	{
+		safe_mutex(&philo->first_fork->mutex, UNLOCK, program);
+		if (philo->id % 2 != 0)
+			safe_mutex(&philo->second_fork->mutex, UNLOCK, program);
 		return (false);
+	}
 	print_fork(philo);
 	if (program->n_philos == 1)
 		return (ft_usleep(program->t_die + 5), false);
@@ -47,7 +52,12 @@ bool	get_second_fork(t_philo *philo, t_program *program)
 	if (safe_mutex(&philo->second_fork->mutex, LOCK, program) == -1)
 		return (false);
 	if (check_program_philo_died(program) != 0)
+	{
+		safe_mutex(&philo->second_fork->mutex, UNLOCK, program);
+		if (philo->id % 2 == 0)
+			safe_mutex(&philo->first_fork->mutex, UNLOCK, program);
 		return (false);
+	}
 	print_fork(philo);
 	if (program->n_philos == 1)
 		return (ft_usleep(program->t_die + 5), false);

@@ -6,7 +6,7 @@
 /*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 21:19:01 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/07 01:55:35 by soutchak         ###   ########.fr       */
+/*   Updated: 2024/05/11 17:21:08 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static bool	track_philo(t_philo *philo, t_program *program)
 			died = 1;
 			break ;
 		}
-		ft_usleep(5);
 	}
 	return (died);
 }
@@ -54,7 +53,7 @@ void	*monitor_thread(void *arg)
 
 	philo = (t_philo *)arg;
 	program = philo->program;
-	ft_usleep(5);
+	ft_usleep(1);
 	died = track_philo(philo, program);
 	ret_value = malloc(sizeof(int));
 	if (!ret_value)
@@ -101,7 +100,7 @@ void	*philo_thread(void *arg)
 	if (set_philo_last_meal(philo) == -1)
 		return (NULL);
 	if (philo->id % 2 == 0)
-		ft_usleep(50);
+		ft_usleep(10);
 	simulation(philo, program);
 	if (check_philo_died(philo) != 1)
 		set_philo_finished(philo);

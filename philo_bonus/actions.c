@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saad <saad@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: soutchak <soutchak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 14:12:38 by soutchak          #+#    #+#             */
-/*   Updated: 2024/04/08 15:41:53 by saad             ###   ########.fr       */
+/*   Updated: 2024/05/11 17:23:25 by soutchak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ bool	eat(t_philo *philo, t_program *program)
 		return (0);
 	if (set_philo_last_meal(philo) == -1)
 		return (ft_putendl_fd("Error setting last meal time", 2), 0);
-	ft_usleep(program->t_eat);
+	if (program->t_die < program->t_eat)
+		ft_usleep(program->t_die);
+	else
+		ft_usleep(program->t_eat);
 	return (1);
 }
 
@@ -70,7 +73,10 @@ bool	sleep_p(t_philo *philo, t_program *program)
 	printf("%s%u %d is sleeping%s\n", color, get_time(), id, RESET);
 	if (safe_sem(program->print_lock, POST, program) == -1)
 		return (0);
-	ft_usleep(program->t_sleep);
+	if (program->t_die < program->t_sleep)
+		ft_usleep(program->t_die);
+	else
+		ft_usleep(program->t_sleep);
 	return (1);
 }
 
